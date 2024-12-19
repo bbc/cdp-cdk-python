@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_DEFAULT_REGION = 'eu-west-1' // Change to your region
+        CDK_STACK_NAME = 'CdpCdkPythonStack'   // Change to your stack name
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    // Install Python dependencies
+                    sh 'pip install -r requirements.txt'
+                }
+            }
+        }
+        stage('CDK Synthesize') {
+            steps {
+                script {
+                    // Synthesize the CDK app
+                    sh 'cdk synth'
+                }
+            }
+        }
+        stage('CDK Deploy') {
+            steps {
+                script {
+                    // Deploy the CDK stack
+                    sh "cdk deploy --require-approval never"
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "CDK deployment completed successfully!"
+        }
+        failure {
+            echo "CDK deployment failed."
+        }
+    }
+}
