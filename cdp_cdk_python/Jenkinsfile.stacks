@@ -17,7 +17,7 @@ pipeline {
         stage('Check env') {
             steps {
                 //  Install Python dependencies
-                sh 'virtualenv -p /usr/bin/python3.8 venv && source venv/bin/activate && pip install -r requirements.txt && cdk synth && cdk deploy --require-approval never'
+                sh 'virtualenv -p /usr/bin/python3 venv && source venv/bin/activate && pip install -r requirements.txt && cdk synth && cdk deploy --require-approval never'
             }
         }
         
