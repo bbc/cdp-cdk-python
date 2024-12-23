@@ -24,7 +24,7 @@ pipeline {
             steps {
                 script {
                     // Synthesize the CDK app
-                    sh 'cdk synth'
+                    sh 'echo $VIRTUAL_ENV && cdk synth'
                 }
             }
         }
