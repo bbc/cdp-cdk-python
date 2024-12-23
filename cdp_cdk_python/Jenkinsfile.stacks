@@ -4,7 +4,13 @@ pipeline {
     environment {
         AWS_DEFAULT_REGION = 'eu-west-1' // Change to your region
         CDK_STACK_NAME = 'CdpCdkPythonStack'   // Change to your stack name
+        PYTHONPATH= '/usr/local/lib/python3.12/site-packages:/var/lib/jenkins/.local/lib/python3.12/site-packages'
     }
+
+//     /opt/rh/rh-python38/root/usr/bin/python3 -V
+// java -version
+// python3.8 -V
+// virtualenv -p /usr/bin/python3.8 test
 
     stages {
         stage('Checkout Code') {
@@ -16,7 +22,7 @@ pipeline {
             steps {
                 script {
                     // Install Python dependencies
-                    sh 'pip install -r requirements.txt && export PYTHONPATH=/usr/local/lib/python3.12/site-packages:/var/lib/jenkins/.local/lib/python3.12/site-packages && env'
+                    sh 'pip install -r requirements.txt && env'
                 }
             }
         }
