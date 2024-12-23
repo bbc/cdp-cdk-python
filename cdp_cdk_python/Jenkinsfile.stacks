@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Check env') {
             steps {
-                sh 'python3.8 -V && env'
+                sh 'virtualenv -p /usr/bin/python3.8 venv && source venv/bin/activate && python --version'
             }
         }
         stage('Checkout Code') {
@@ -23,7 +23,7 @@ pipeline {
             steps {
                 script {
                     // Install Python dependencies
-                    sh 'virtualenv -p /usr/bin/python3.8 -m pip install -r requirements.txt'
+                    sh 'pip install -r requirements.txt'
                 }
             }
         }
