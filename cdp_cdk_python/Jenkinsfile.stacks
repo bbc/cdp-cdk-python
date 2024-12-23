@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     // Install Python dependencies
-                    sh 'echo $VIRTUAL_ENV && source .venv/bin/activate && echo $VIRTUAL_ENV && pip install -r requirements.txt && echo pwd'
+                    sh 'echo $VIRTUAL_ENV && source .venv/bin/activate && echo $VIRTUAL_ENV && pip install -r requirements.txt && pwd'
                 }
             }
         }
