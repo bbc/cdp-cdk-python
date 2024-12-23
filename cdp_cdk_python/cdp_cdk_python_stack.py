@@ -4,7 +4,7 @@ from aws_cdk import (
     # aws_sqs as sqs,
     aws_s3 as s3,
     aws_iam as iam,
-    aws_redshiftserverless as redshiftserverless,
+    # aws_redshiftserverless as redshiftserverless,
     
 )
 import aws_cdk as core
