@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 
-import sys
+# import sys
 # sys.path += ['/usr/local/lib/python3.12/site-packages','/var/lib/jenkins/.local/lib/python3.12/site-packages']
 import aws_cdk as cdk
 
