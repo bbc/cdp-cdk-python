@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 import os
 
+import sys
+
+# adding Folder_2 to the system path
+sys.path.insert(0, '/usr/local/lib/python3.12/site-packages')
+
 import aws_cdk as cdk
 
 from cdp_cdk_python.cdp_cdk_python_stack import CdpCdkPythonStack
