@@ -16,26 +16,26 @@ pipeline {
         }
         stage('Check env') {
             steps {
-                sh 'virtualenv -p /usr/bin/python3.8 venv && source venv/bin/activate && python --version && pip install -r requirements.txt'
+                sh 'virtualenv -p /usr/bin/python3.8 venv && source venv/bin/activate && python --version && pip install -r requirements.txt && cdk synth'
             }
         }
         
-        stage('Install Dependencies') {
-            steps {
-                script {
-                    // Install Python dependencies
-                    sh 'pip install -r requirements.txt'
-                }
-            }
-        }
-        stage('CDK Synthesize') {
-            steps {
-                script {
-                    // Synthesize the CDK app
-                    sh 'cdk synth'
-                }
-            }
-        }
+        // stage('Install Dependencies') {
+        //     steps {
+        //         script {
+        //             // Install Python dependencies
+        //             sh 'pip install -r requirements.txt'
+        //         }
+        //     }
+        // }
+        // stage('CDK Synthesize') {
+        //     steps {
+        //         script {
+        //             // Synthesize the CDK app
+        //             sh 'cdk synth'
+        //         }
+        //     }
+        // }
         stage('CDK Deploy') {
             steps {
                 script {
