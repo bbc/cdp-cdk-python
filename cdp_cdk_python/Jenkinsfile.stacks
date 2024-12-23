@@ -24,7 +24,7 @@ pipeline {
             steps {
                 script {
                     // Synthesize the CDK app
-                    sh 'ls -ralt .venv/lib/python3.13/site-packages && ls -l /var/lib/jenkins/.local/lib/python3.12/site-packages && cdk synth'
+                    sh 'ls -l /var/lib/jenkins/.local/lib/python3.12/site-packages && cdk synth'
                 }
             }
         }
