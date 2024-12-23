@@ -24,7 +24,7 @@ pipeline {
             steps {
                 script {
                     // Synthesize the CDK app
-                    sh 'source .venv/bin/activate && echo $VIRTUAL_ENV && ls -l .venv/lib  && ls -l /var/lib/jenkins/.local/lib/python3.12/site-packages && cdk synth'
+                    sh 'source .venv/bin/activate && echo $VIRTUAL_ENV && ls -l .venv/lib  && ls -l /var/lib/jenkins/.local/lib/python3.12/site-packages && deactivate && cdk synth'
                 }
             }
         }
