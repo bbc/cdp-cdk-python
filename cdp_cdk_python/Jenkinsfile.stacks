@@ -9,16 +9,17 @@ pipeline {
 
 
     stages {
-        stage('Check env') {
-            steps {
-                sh 'virtualenv -p /usr/bin/python3.8 venv && source venv/bin/activate && python --version'
-            }
-        }
         stage('Checkout Code') {
             steps {
                 checkout scm
             }
         }
+        stage('Check env') {
+            steps {
+                sh 'virtualenv -p /usr/bin/python3.8 venv && source venv/bin/activate && python --version && pip install -r requirements.txt'
+            }
+        }
+        
         stage('Install Dependencies') {
             steps {
                 script {
