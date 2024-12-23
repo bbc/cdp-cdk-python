@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     // Install Python dependencies
-                    sh 'virtualenv venv && . venv/bin/activate && pip install -r requirements.txt'
+                    sh 'source venv/bin/activate && python -m pip install -r requirements.txt'
                 }
             }
         }
