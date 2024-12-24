@@ -10,6 +10,9 @@ from aws_cdk import (
 import aws_cdk as core
 from constructs import Construct
 
+import json
+from aws_cdk.cloudformation_include import CfnInclude
+
 class CdpCdkPythonStack(Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
@@ -24,6 +27,33 @@ class CdpCdkPythonStack(Stack):
         # )
 
         # bucket = s3.Bucket(self, "MyFirstBucketTest", versioned=True)
+
+        # Load parameters from a JSON file
+        parameters_file = "mle-non-pii-redshift-role-param.json"
+        with open(parameters_file, "r") as f:
+            parameters = json.load(f).get("parameters", "")
+
+        # Access parameters
+        # dbUser = parameters.get("DbUser", "")
+        # dbName = parameters.get("DbName", "")
+        # Environment = parameters.get("Environment")
+
+        # Include the existing CloudFormation template
+        template = CfnInclude(
+            self,
+            "ExistingTemplate",
+            template_file="mle-non-pii-redshift-role-template.json"
+        )
+        
+        # Pass the parameters to the template
+        template.add_parameter_override("DbUser", parameters["DbUser"])
+        template.add_parameter_override("DbName", parameters["DbName"])
+        template.add_parameter_override("Environment", parameters["Environment"])
+        template.add_parameter_override("ExternalAccountRootRoles", parameters["ExternalAccountRootRoles"])
+        template.add_parameter_override("ExternalIAMRoleARNs", parameters["ExternalIAMRoleARNs"])
+
+# Access resources defined in the CloudFormation template
+        redshiftCrossAccountRole = template.get_resource("RedshiftCrossAccountRole")
 
         # Create IAM role for Redshift access
         redshift_role = iam.Role(
@@ -77,5 +107,9 @@ class CdpCdkPythonStack(Stack):
         #     value=workgroup.attr_endpoint_address)
         core.CfnOutput(
             self, 
-            "RoleArn", 
+            "RoleArn1", 
+            value=redshiftCrossAccountRole.role_arn)
+        core.CfnOutput(
+            self, 
+            "RoleArn2", 
             value=redshift_role.role_arn)

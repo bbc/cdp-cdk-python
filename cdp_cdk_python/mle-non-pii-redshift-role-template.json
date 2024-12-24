@@ -1,0 +1,97 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Parameters": {
+    "DbUser": {
+      "Description": "ARN of the Redshift DB user",
+      "Type": "String"
+    },
+    "DbName": {
+      "Description": "ARN of the Redshift DB name",
+      "Type": "String"
+    },
+    "Environment": {
+      "Type": "String",
+      "Description": "The name of the environment.",
+      "AllowedValues": [
+        "int",
+        "test",
+        "stage",
+        "live"
+      ]
+    },
+    "ExternalAccountRootRoles": {
+      "Type": "CommaDelimitedList",
+      "Description": "IAM Role ARN in external team used for accessing redshift"
+    },
+    "ExternalIAMRoleARNs": {
+      "Description": "The ARN of external IAM Role",
+      "Type": "CommaDelimitedList"
+    }
+  },
+  "Resources": {
+    "RedshiftCrossAccountRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "Path": "/",
+        "RoleName": {
+          "Fn::Join": [
+            "-",
+            [
+              {
+                "Ref": "Environment"
+              },
+              "scv-mle-non-pii-RedshiftRole-test"
+            ]
+          ]
+        },
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "sts:AssumeRole"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Ref": "ExternalAccountRootRoles"
+                },
+                "Service": "redshift.amazonaws.com"
+              },
+              "Condition": {
+                "ArnEquals": {
+                  "aws:PrincipalArn": {
+                    "Ref": "ExternalIAMRoleARNs"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "RedshiftNONPIICrossAccountIdentityPolicy",
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "redshift:GetClusterCredentials",
+                    "redshift:CreateClusterUser"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Ref": "DbUser"
+                    },
+                    {
+                      "Ref": "DbName"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

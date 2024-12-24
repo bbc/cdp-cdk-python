@@ -1,0 +1,12 @@
+{
+  "aws_account_id": "977228593394",
+  "region": "eu-west-1",
+  "main_stack": false,
+  "parameters": {
+    "DbUser": "arn:aws:redshift:eu-west-1:977228593394:dbuser:test-idl-redshift-component-comp-redshiftcluster/mle_non_pii_user",
+    "DbName": "arn:aws:redshift:eu-west-1:977228593394:dbname:test-idl-redshift-component-comp-redshiftcluster/redshiftdb",
+    "Environment": "test",
+    "ExternalAccountRootRoles": "arn:aws:iam::343631101122:root",
+    "ExternalIAMRoleARNs": "arn:aws:iam::343631101122:role/stage-MLE-SageMaker-RedShift-Reader"
+  }
+}
