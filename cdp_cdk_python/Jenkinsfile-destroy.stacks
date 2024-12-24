@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_DEFAULT_REGION = 'eu-west-1' // Change to your region
+        CDK_STACK_NAME = 'CdpCdkPythonStack'   // Change to your stack name
+        // PYTHONPATH= '/usr/local/lib/python3.12/site-packages:/var/lib/jenkins/.local/lib/python3.12/site-packages'
+    }
+
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Check env') {
+            steps {
+                //  Use Python3, activate venv, install Python dependencies, synthesize the CDK app and deploy the CDK stack
+                sh 'virtualenv -p /usr/bin/python3 venv && source venv/bin/activate && pip install -r requirements.txt && cdk destroy --all --force'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "CDK deployment completed successfully!"
+        }
+        failure {
+            echo "CDK deployment failed."
+        }
+    }
+}
