@@ -10,6 +10,7 @@ from aws_cdk import (
 import aws_cdk as core
 from constructs import Construct
 
+import os 
 import json
 from aws_cdk.cloudformation_include import CfnInclude
 
@@ -29,7 +30,9 @@ class CdpCdkPythonStack(Stack):
         # bucket = s3.Bucket(self, "MyFirstBucketTest", versioned=True)
 
         # Load parameters from a JSON file
-        parameters_file = "mle-non-pii-redshift-role-param.json"
+        
+        dirname = os.path.dirname(__file__) 
+        parameters_file = os.path.join(dirname, '/mle-non-pii-redshift-role-param.json') 
         with open(parameters_file, "r") as f:
             parameters = json.load(f).get("parameters", "")
 
