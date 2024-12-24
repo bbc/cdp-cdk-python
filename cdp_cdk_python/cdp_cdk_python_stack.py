@@ -115,7 +115,7 @@ class CdpCdkPythonStack(Stack):
         core.CfnOutput(
             self, 
             "RoleArn1", 
-            value=redshiftCrossAccountRole.role_arn)
+            value=f"arn:aws:iam:::{redshiftCrossAccountRole.ref}")
         core.CfnOutput(
             self, 
             "RoleArn2", 
