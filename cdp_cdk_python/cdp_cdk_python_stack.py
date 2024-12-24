@@ -27,11 +27,28 @@ class CdpCdkPythonStack(Stack):
 
         # Create IAM role for Redshift access
         redshift_role = iam.Role(
-            self, "test-non-pii-RedshiftRole",
+            self, 
+            "test-non-pii-RedshiftRole",
             assumed_by=iam.ServicePrincipal("redshift.amazonaws.com"),
-            managed_policies=[
-                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonS3ReadOnlyAccess")
-            ]
+        )
+
+        redshift_role.attach_inline_policy(
+            iam.Policy(
+                self,
+                "ExperimentationRedshiftPolicy",
+                statements=[
+                    iam.PolicyStatement(
+                        actions=[
+                            "redshift:GetClusterCredentials",
+                            "redshift:CreateClusterUser"
+                        ],
+                        resources=[
+                            "arn:aws:redshift:eu-west-1:977228593394:dbuser:test-idl-redshift-component-comp-redshiftcluster/experimentation_airflow",
+                            "arn:aws:redshift:eu-west-1:977228593394:dbname:test-idl-redshift-component-comp-redshiftcluster/redshiftdb"
+                        ],
+                    )
+                ],
+            )
         )
 
         # # Create Redshift Serverless Namespace
@@ -54,4 +71,11 @@ class CdpCdkPythonStack(Stack):
         #     security_group_ids=["sg-zzzzzzzz"]  # Replace with actual security group IDs
         # )
 
-        # core.CfnOutput(self, "WorkgroupEndpoint", value=workgroup.attr_endpoint_address)
+        # core.CfnOutput(
+        #     self, 
+        #     "WorkgroupEndpoint", 
+        #     value=workgroup.attr_endpoint_address)
+        core.CfnOutput(
+            self, 
+            "RoleArn", 
+            value=redshift_role.role_arn)
