@@ -31,10 +31,10 @@ class CdpCdkPythonStack(Stack):
 
         # Load parameters from a JSON file
         
-        dirname = os.path.dirname(os.path.abspath(__file__))
-        parameters_file = os.path.join(dirname, './mle-non-pii-redshift-role-param.json') 
+        parameters_file = './mle-non-pii-redshift-role-param.json'
         with open(parameters_file, "r") as f:
             parameters = json.load(f).get("parameters", "")
+        print('DbUser: %s' % parameters["DbUser"]) 
 
         # Access parameters
         # dbUser = parameters.get("DbUser", "")
@@ -45,7 +45,7 @@ class CdpCdkPythonStack(Stack):
         template = CfnInclude(
             self,
             "ExistingTemplate",
-            template_file="mle-non-pii-redshift-role-template.json"
+            template_file="./mle-non-pii-redshift-role-template.json"
         )
         
         # Pass the parameters to the template
