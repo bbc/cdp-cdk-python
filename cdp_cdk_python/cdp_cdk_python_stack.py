@@ -48,15 +48,16 @@ class CdpCdkPythonStack(Stack):
         template = CfnInclude(
             self,
             "ExistingTemplate",
-            template_file=template_file
+            template_file=template_file,
+            parameters=parameters
         )
         
         # Pass the parameters to the template
-        template.add_parameter_override("DbUser", parameters["DbUser"])
-        template.add_parameter_override("DbName", parameters["DbName"])
-        template.add_parameter_override("Environment", parameters["Environment"])
-        template.add_parameter_override("ExternalAccountRootRoles", parameters["ExternalAccountRootRoles"])
-        template.add_parameter_override("ExternalIAMRoleARNs", parameters["ExternalIAMRoleARNs"])
+        # template.add_parameter_override("DbUser", parameters["DbUser"])
+        # template.add_parameter_override("DbName", parameters["DbName"])
+        # template.add_parameter_override("Environment", parameters["Environment"])
+        # template.add_parameter_override("ExternalAccountRootRoles", parameters["ExternalAccountRootRoles"])
+        # template.add_parameter_override("ExternalIAMRoleARNs", parameters["ExternalIAMRoleARNs"])
 
 # Access resources defined in the CloudFormation template
         redshiftCrossAccountRole = template.get_resource("RedshiftCrossAccountRole")
