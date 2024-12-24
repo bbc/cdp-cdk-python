@@ -23,16 +23,16 @@ class CdpCdkPythonStack(Stack):
         #     visibility_timeout=Duration.seconds(300),
         # )
 
-        bucket = s3.Bucket(self, "MyFirstBucketTest", versioned=True)
+        # bucket = s3.Bucket(self, "MyFirstBucketTest", versioned=True)
 
         # Create IAM role for Redshift access
-        # redshift_role = iam.Role(
-        #     self, "RedshiftRole",
-        #     assumed_by=iam.ServicePrincipal("redshift.amazonaws.com"),
-        #     managed_policies=[
-        #         iam.ManagedPolicy.from_aws_managed_policy_name("AmazonS3ReadOnlyAccess")
-        #     ]
-        # )
+        redshift_role = iam.Role(
+            self, "test-non-pii-RedshiftRole",
+            assumed_by=iam.ServicePrincipal("redshift.amazonaws.com"),
+            managed_policies=[
+                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonS3ReadOnlyAccess")
+            ]
+        )
 
         # # Create Redshift Serverless Namespace
         # namespace = redshiftserverless.CfnNamespace(
