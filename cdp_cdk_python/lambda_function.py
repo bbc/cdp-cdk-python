@@ -95,7 +95,7 @@ def send(event, context, responseStatus, responseData, physicalResourceId=None, 
         print("Status code:", response.status)
     except Exception as e:
         print("send(..) failed executing http.request(..):", e)
-def lambda_handler(event, context):
+def handler(event, context):
     print('Event:', json.dumps(event))
     try: 
         datashareName = os.environ.get('DATASHARE_NAME')
