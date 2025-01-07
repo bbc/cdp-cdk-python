@@ -101,7 +101,7 @@ class CdpCdkPythonStack(Stack):
         # )
 
         print('lambda path: %s' % os.path.join(cwd, "lambda_handler.zip")) 
-        print('lambda path: %s' % os.path.join(dirname, "lambda_handler.zip")) 
+        print('lambda path: %s' % os.path.join(dirname, "./lambda_handler")) 
 
         fn = _lambda.Function(
             self, 
@@ -115,7 +115,7 @@ class CdpCdkPythonStack(Stack):
                 "REGION": core.Stack.region,
                 # "AVAILABILITY_ZONES": json.dumps(core.Stack.availability_zones),
             },
-            code=_lambda.Code.from_asset(os.path.join(dirname, "lambda_handler"))
+            code=_lambda.Code.from_asset(os.path.join(dirname, "./lambda_handler"))
         )
         
     
