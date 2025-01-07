@@ -99,6 +99,9 @@ class CdpCdkPythonStack(Stack):
         #     subnet_ids=["subnet-xxxxxxx", "subnet-yyyyyyy"],  # Replace with actual subnet IDs
         #     security_group_ids=["sg-zzzzzzzz"]  # Replace with actual security group IDs
         # )
+
+        print('lambda path: %s' % os.path.join(cwd, "./lambda_handler.zip")) 
+
         fn = _lambda.Function(
             self, 
             "MyFunction",
@@ -111,7 +114,7 @@ class CdpCdkPythonStack(Stack):
                 "REGION": core.Stack.region,
                 # "AVAILABILITY_ZONES": json.dumps(core.Stack.availability_zones),
             },
-            code=_lambda.Code.from_asset(os.path.join(cwd, "lambda_handler.zip"))
+            code=_lambda.Code.from_asset(os.path.join(cwd, "./lambda_handler.zip"))
         )
         
     
