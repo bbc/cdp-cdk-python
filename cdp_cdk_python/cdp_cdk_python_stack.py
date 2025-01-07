@@ -107,7 +107,7 @@ class CdpCdkPythonStack(Stack):
             self, 
             "MyFunction",
             runtime=_lambda.Runtime.PYTHON_3_9,
-            handler="lambda_function.py",
+            handler="lambda_function.lambda_handler",
             timeout=core.Duration.minutes(15),
             # memorySize=1024,
             environment={
