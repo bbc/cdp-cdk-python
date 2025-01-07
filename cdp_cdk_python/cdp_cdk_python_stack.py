@@ -104,13 +104,13 @@ class CdpCdkPythonStack(Stack):
             runtime=_lambda.Runtime.PYTHON_3_6,
             handler="index.handler",
             timeout=core.Duration.minutes(15),
-            MemorySize=1024,
+            memorySize=1024,
             environment={
                 "CodeVersionString": 1.0,
                 "REGION": core.Stack.region,
                 # "AVAILABILITY_ZONES": json.dumps(core.Stack.availability_zones),
             },
-            code=_lambda.Code.from_asset(os.path.join(dirname, "lambda-handler"))
+            code=_lambda.Code.from_asset(os.path.join(dirname, "lambda_handler"))
         )
         
     
