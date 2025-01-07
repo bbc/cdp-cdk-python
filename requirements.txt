@@ -1,6 +1,6 @@
 attrs==22.2.0
 aws-cdk-lib==2.18.0
-aws-cdk.cloud-assembly-schema==38.0.1
+aws-cdk.cloud-assembly-schema==2.23.0
 boto3==1.35.94
 botocore==1.35.94
 cattrs==24.1.2
