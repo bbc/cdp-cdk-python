@@ -101,13 +101,13 @@ class CdpCdkPythonStack(Stack):
         # )
 
         print('lambda path: %s' % os.path.join(cwd, "lambda_handler.zip")) 
-        print('lambda path: %s' % os.path.join(dirname, "./lambda_handler")) 
+        print('lambda path: %s' % os.path.join(dirname, "lambda_handler")) 
 
         fn = _lambda.Function(
             self, 
             "MyFunction",
             runtime=_lambda.Runtime.PYTHON_3_9,
-            handler="index.handler",
+            handler="lambda_function.lambda_handler",
             timeout=core.Duration.minutes(15),
             # memorySize=1024,
             environment={
