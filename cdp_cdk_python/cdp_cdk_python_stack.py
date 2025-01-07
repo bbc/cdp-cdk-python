@@ -4,6 +4,7 @@ from aws_cdk import (
     # aws_sqs as sqs,
     aws_s3 as s3,
     aws_iam as iam,
+    aws_lambda as _lambda,
     # aws_redshiftserverless as redshiftserverless,
     
 )
@@ -39,11 +40,6 @@ class CdpCdkPythonStack(Stack):
             parameters = json.load(f).get("parameters", "")
         print('DbUser: %s' % parameters["DbUser"]) 
 
-        # Access parameters
-        # dbUser = parameters.get("DbUser", "")
-        # dbName = parameters.get("DbName", "")
-        # Environment = parameters.get("Environment")
-
         # Include the existing CloudFormation template
         template = CfnInclude(
             self,
@@ -52,12 +48,7 @@ class CdpCdkPythonStack(Stack):
             parameters=parameters
         )
         
-        # Pass the parameters to the template
-        # template.add_parameter_override("DbUser", parameters["DbUser"])
-        # template.add_parameter_override("DbName", parameters["DbName"])
-        # template.add_parameter_override("Environment", parameters["Environment"])
-        # template.add_parameter_override("ExternalAccountRootRoles", parameters["ExternalAccountRootRoles"])
-        # template.add_parameter_override("ExternalIAMRoleARNs", parameters["ExternalIAMRoleARNs"])
+ 
 
 # Access resources defined in the CloudFormation template
         redshiftCrossAccountRole = template.get_resource("RedshiftCrossAccountRole")
@@ -107,7 +98,22 @@ class CdpCdkPythonStack(Stack):
         #     subnet_ids=["subnet-xxxxxxx", "subnet-yyyyyyy"],  # Replace with actual subnet IDs
         #     security_group_ids=["sg-zzzzzzzz"]  # Replace with actual security group IDs
         # )
-
+        fn = _lambda.Function(
+            self, 
+            "MyFunction",
+            runtime=_lambda.Runtime.PYTHON_3_6,
+            handler="index.handler",
+            timeout=core.Duration.minutes(15),
+            memorySize=1024,
+            environment={
+                "CodeVersionString": 1.0,
+                "REGION": core.Stack.region,
+                "AVAILABILITY_ZONES": json.dumps(core.Stack.availability_zones),
+            },
+            code=_lambda.Code.from_asset(os.path.join(dirname, "lambda-handler"))
+        )
+        
+    
         # core.CfnOutput(
         #     self, 
         #     "WorkgroupEndpoint", 
