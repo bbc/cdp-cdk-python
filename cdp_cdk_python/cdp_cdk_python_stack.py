@@ -106,7 +106,7 @@ class CdpCdkPythonStack(Stack):
         fn = _lambda.Function(
             self, 
             "MyFunction",
-            runtime=_lambda.Runtime.PYTHON_3,
+            runtime=_lambda.Runtime.PYTHON_3_9,
             handler="index.handler",
             timeout=core.Duration.minutes(15),
             # memorySize=1024,
