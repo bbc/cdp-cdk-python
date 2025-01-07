@@ -100,14 +100,14 @@ class CdpCdkPythonStack(Stack):
         #     security_group_ids=["sg-zzzzzzzz"]  # Replace with actual security group IDs
         # )
 
-        print('lambda path: %s' % os.path.join(cwd, "lambda_handler.zip")) 
+        print('lambda path: %s' % dirname) 
         print('lambda path: %s' % os.path.join(dirname, "lambda_function.py.zip")) 
 
         fn = _lambda.Function(
             self, 
             "MyFunction",
             runtime=_lambda.Runtime.PYTHON_3_9,
-            handler="lambda_function.handler",
+            handler="lambda_function.py",
             timeout=core.Duration.minutes(15),
             # memorySize=1024,
             environment={
@@ -115,7 +115,7 @@ class CdpCdkPythonStack(Stack):
                 "REGION": core.Stack.region,
                 # "AVAILABILITY_ZONES": json.dumps(core.Stack.availability_zones),
             },
-            code=_lambda.Code.from_asset(os.path.join(dirname, "lambda_function.py.zip"))
+            code=_lambda.Code.from_asset(dirname)
         )
         
     
