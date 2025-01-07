@@ -104,7 +104,7 @@ class CdpCdkPythonStack(Stack):
             runtime=_lambda.Runtime.PYTHON_3_6,
             handler="index.handler",
             timeout=core.Duration.minutes(15),
-            memorysize=1024,
+            MemorySize=1024,
             environment={
                 "CodeVersionString": 1.0,
                 "REGION": core.Stack.region,
