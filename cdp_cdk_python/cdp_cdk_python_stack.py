@@ -33,6 +33,7 @@ class CdpCdkPythonStack(Stack):
         # Load parameters from a JSON file
         
         dirname = os.path.dirname(os.path.abspath(__file__))
+        cwd = os.getcwd()
         parameters_file = os.path.join(dirname, './mle-non-pii-redshift-role-param.json') 
         template_file = os.path.join(dirname, "./mle-non-pii-redshift-role-template.json")
 
@@ -110,7 +111,7 @@ class CdpCdkPythonStack(Stack):
                 "REGION": core.Stack.region,
                 # "AVAILABILITY_ZONES": json.dumps(core.Stack.availability_zones),
             },
-            code=_lambda.Code.from_asset(os.path.join(dirname, "./lambda_handler/lambda_function"))
+            code=_lambda.Code.from_asset(os.path.join(cwd, "lambda_handler"))
         )
         
     
