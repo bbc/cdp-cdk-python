@@ -116,7 +116,7 @@ class CdpCdkPythonStack(Stack):
             # memorySize=1024,
             environment={
                 "CodeVersionString": 1.0,
-                "REGION": core.Stack.region,
+                # "REGION": core.Stack.region,
                 # "AVAILABILITY_ZONES": json.dumps(core.Stack.availability_zones),
             },
             # code=_lambda.Code.from_asset("./cdp_cdk_python")
