@@ -108,7 +108,10 @@ class CdpCdkPythonStack(Stack):
             self, 
             "MyFunction",
             runtime=_lambda.Runtime.PYTHON_3_9,
-            handler="lambda_function.lambda_handler",
+            # handler="lambda_function.lambda_handler",
+            handler="lambda_handler",
+            index="lambda_function.py",
+            entry=dirname,
             timeout=core.Duration.minutes(15),
             # memorySize=1024,
             environment={
@@ -116,7 +119,7 @@ class CdpCdkPythonStack(Stack):
                 "REGION": core.Stack.region,
                 # "AVAILABILITY_ZONES": json.dumps(core.Stack.availability_zones),
             },
-            code=_lambda.Code.from_asset("./cdp_cdk_python")
+            # code=_lambda.Code.from_asset("./cdp_cdk_python")
             # code=_lambda.InlineCode("foo"),
         )
         
