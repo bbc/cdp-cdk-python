@@ -102,7 +102,8 @@ class CdpCdkPythonStack(Stack):
 
         print('lambda path: %s' % os.path.join(dirname, "./mle-non-pii-redshift-role-template.json")) 
         print('lambda path: %s' % os.path.join(dirname, "lambda_function.py.zip")) 
-
+        print('cwd: %s' % cwd) 
+        
         fn = _lambda.Function(
             self, 
             "MyFunction",
@@ -115,7 +116,7 @@ class CdpCdkPythonStack(Stack):
                 "REGION": core.Stack.region,
                 # "AVAILABILITY_ZONES": json.dumps(core.Stack.availability_zones),
             },
-            code=_lambda.Code.from_asset(dirname)
+            code=_lambda.Code.from_asset("./lambda_function.py.zip")
             # code=_lambda.InlineCode("foo"),
         )
         
