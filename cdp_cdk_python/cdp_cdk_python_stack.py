@@ -125,7 +125,7 @@ class CdpCdkPythonStack(Stack):
                 # "REGION": core.Stack.region,
                 # "AVAILABILITY_ZONES": json.dumps(core.Stack.availability_zones),
             # },
-            code=_lambda.Code.from_asset("cdp_cdk_python")
+            code=_lambda.Code.from_asset("cdp_cdk_python"),
             timeout=core.Duration.minutes(15),
             memory_size=memory_param.value_as_number,
         )
