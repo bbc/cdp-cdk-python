@@ -23,7 +23,7 @@ class LambdaRolePolicyStack(Stack):
         )
 
         # Initialize the policy loader
-        policy_loader = PolicyLoader(policy_dir="policies")
+        policy_loader = PolicyLoader(policy_dir="cdp_cdk_python/policies")
 
         # Load the policy with variable replacements
         lambda_basic_execution = policy_loader.load_policy(
