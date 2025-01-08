@@ -111,12 +111,13 @@ class CdpCdkPythonStack(Stack):
             handler="lambda_function.lambda_handler",
             timeout=core.Duration.minutes(15),
             # memorySize=1024,
-            environment={
-                "CodeVersionString": 1.0,
-                "REGION": core.Stack.region,
+            # environment={
+                # "CodeVersionString": 1.0,
+                # "REGION": core.Stack.region,
                 # "AVAILABILITY_ZONES": json.dumps(core.Stack.availability_zones),
-            },
+            # },
             code=_lambda.Code.from_asset("cdp_cdk_python")
+            # code=_lambda.InlineCode("foo"),
         )
         
     
