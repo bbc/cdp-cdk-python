@@ -37,4 +37,11 @@ class PolicyLoader:
         :param policy_name: Name of the policy.
         :param policy_document: The IAM PolicyDocument to attach.
         """
-        role.attach_inline_policy(policy_document)
+        role.attach_inline_policy(iam.Policy(
+                self,
+                "IamPolicy",
+                policy_name=policy_name,
+                document=policy_document
+            )
+        )
+        # role.inline_policies[policy_name] = policy_document
