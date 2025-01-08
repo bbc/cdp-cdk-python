@@ -10,7 +10,7 @@ from aws_cdk import (
 )
 import aws_cdk as core
 from constructs import Construct
-from policy_loader import PolicyLoader
+from .policy_loader import PolicyLoader
 
 class LambdaRolePolicyStack(Stack):
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
