@@ -116,7 +116,7 @@ class CdpCdkPythonStack(Stack):
                 "REGION": core.Stack.region,
                 # "AVAILABILITY_ZONES": json.dumps(core.Stack.availability_zones),
             },
-            code=_lambda.Code.from_asset("./lambda_function.py.zip")
+            code=_lambda.Code.from_asset("./cdp_cdk_python/lambda_function.py.zip")
             # code=_lambda.InlineCode("foo"),
         )
         
