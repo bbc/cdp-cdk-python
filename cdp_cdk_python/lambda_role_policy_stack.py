@@ -1,11 +1,19 @@
 from aws_cdk import (
-    core as cdk,
+    # Duration,
+    Stack,
+    # aws_sqs as sqs,
+    aws_s3 as s3,
     aws_iam as iam,
+    aws_lambda as _lambda,
+    # aws_redshiftserverless as redshiftserverless,
+    
 )
+import aws_cdk as core
+from constructs import Construct
 from policy_loader import PolicyLoader
 
-class LambdaRolePolicyStack(cdk.Stack):
-    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
+class LambdaRolePolicyStack(Stack):
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # Create an IAM Role
@@ -18,7 +26,7 @@ class LambdaRolePolicyStack(cdk.Stack):
         policy_loader = PolicyLoader(policy_dir="policies")
 
         # Load the policy with variable replacements
-        policy1 = policy_loader.load_policy(
+        lambda_basic_execution = policy_loader.load_policy(
             file_name="lambda_basic_execution.json",
             variables={}
         )
@@ -26,6 +34,15 @@ class LambdaRolePolicyStack(cdk.Stack):
         # Attach the policy to the IAM role
         policy_loader.attach_policy_to_role(
             role=iam_role,
-            policy_name="S3AccessPolicy",
-            policy_document=policy1
+            policy_name="LambdaBasicExecutionPolicy",
+            policy_document=lambda_basic_execution
         )
+
+        core.CfnOutput(
+            self, 
+            "RoleArn", 
+            value=iam_role.role_arn)
+        core.CfnOutput(
+            self, 
+            "FunctionArn", 
+            value=lambda_basic_execution)

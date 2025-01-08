@@ -6,10 +6,10 @@ import os
 import aws_cdk as cdk
 
 from cdp_cdk_python.cdp_cdk_python_stack import CdpCdkPythonStack
-
+from cdp_cdk_python.lambda_role_policy_stack import LambdaRolePolicyStack
 
 app = cdk.App()
-CdpCdkPythonStack(app, "CdpCdkPythonStack",
+LambdaRolePolicyStack(app, "LambdaRolePolicyStack",
     # If you don't specify 'env', this stack will be environment-agnostic.
     # Account/Region-dependent features and context lookups will not work,
     # but a single synthesized template can be deployed anywhere.
