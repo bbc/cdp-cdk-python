@@ -115,7 +115,7 @@ class CdpCdkPythonStack(Stack):
             timeout=core.Duration.minutes(15),
             # memorySize=1024,
             environment={
-                "CodeVersionString": 1.0,
+                # "CodeVersionString": 1.0,
                 # "REGION": core.Stack.region,
                 # "AVAILABILITY_ZONES": json.dumps(core.Stack.availability_zones),
             },
