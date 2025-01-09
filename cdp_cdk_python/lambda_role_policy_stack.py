@@ -32,6 +32,7 @@ class LambdaRolePolicyStack(Stack):
         )
 
         # Attach the policy to the IAM role
+        print(lambda_basic_execution.to_string)
         policy_loader.attach_policy_to_role(
             role=iam_role,
             policy_name="LambdaBasicExecutionPolicy",
