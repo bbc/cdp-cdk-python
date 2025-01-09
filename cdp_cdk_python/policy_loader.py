@@ -38,11 +38,14 @@ class PolicyLoader:
         :param policy_name: Name of the policy.
         :param policy_document: The IAM PolicyDocument to attach.
         """
-        role.add_to_principal_policy(
-            iam.Policy(
-                self,
-                policy_name,
-                document=policy_document
+        try: 
+            role.add_to_principal_policy(
+                iam.Policy(
+                    self,
+                    policy_name,
+                    document=policy_document
+                )
             )
-        )
+        except Exception as e:
+            print(f"Error: {e}")
         # role.inline_policies[policy_name] = policy_document
