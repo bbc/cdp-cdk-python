@@ -9,7 +9,7 @@ class PolicyLoader:
         """
         self.policy_dir = policy_dir
 
-    def load_policy(self, file_name: str, variables: dict) -> str:
+    def load_policy(self, file_name: str, variables: dict) -> iam.PolicyDocument:
         """
         Load an IAM policy file and replace placeholders with provided variables.
         :param file_name: Name of the policy JSON file.
@@ -28,8 +28,7 @@ class PolicyLoader:
 
         # Convert the processed policy back to JSON and create a PolicyDocument
         processed_policy = json.loads(policy_str)
-        # return iam.PolicyDocument.from_json(processed_policy)
-        return processed_policy
+        return iam.PolicyDocument.from_json(processed_policy)
 
     def attach_policy_to_role(self, role: iam.Role, policy_name: str, policy_document: iam.PolicyDocument):
         """
@@ -42,7 +41,7 @@ class PolicyLoader:
             role.attach_inline_policy(iam.Policy(
                     self,
                     policy_name,
-                    document=policy_document.to_json.__str__
+                    document=policy_document
                 )
             )
         except Exception as e:
