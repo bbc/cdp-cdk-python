@@ -39,8 +39,7 @@ class PolicyLoader:
         """
         role.attach_inline_policy(iam.Policy(
                 self,
-                "IamPolicy",
-                policy_name=policy_name,
+                policy_name,
                 document=policy_document
             )
         )
