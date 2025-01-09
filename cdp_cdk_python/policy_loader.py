@@ -42,7 +42,7 @@ class PolicyLoader:
             role.attach_inline_policy(iam.Policy(
                     self,
                     policy_name,
-                    document=policy_document
+                    document=policy_document.to_string
                 )
             )
         except Exception as e:
