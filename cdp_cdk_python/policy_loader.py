@@ -28,7 +28,6 @@ class PolicyLoader:
 
         # Convert the processed policy back to JSON and create a PolicyDocument
         processed_policy = json.loads(policy_str)
-        print(processed_policy)
         return iam.PolicyDocument.from_json(processed_policy)
 
     def attach_policy_to_role(self, role: iam.Role, policy_name: str, policy_document: iam.PolicyDocument):
@@ -38,14 +37,11 @@ class PolicyLoader:
         :param policy_name: Name of the policy.
         :param policy_document: The IAM PolicyDocument to attach.
         """
-        print(policy_document.to_string)
-        print(policy_document.to_json)
-        try: 
-            role.add_to_principal_policy(
-                iam.Policy(
+        try:
+            role.attach_inline_policy(iam.Policy(
                     self,
                     policy_name,
-                    document=policy_document.to_string
+                    document=policy_document
                 )
             )
         except Exception as e:
