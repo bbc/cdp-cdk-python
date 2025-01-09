@@ -28,6 +28,7 @@ class PolicyLoader:
 
         # Convert the processed policy back to JSON and create a PolicyDocument
         processed_policy = json.loads(policy_str)
+        print(processed_policy)
         return iam.PolicyDocument.from_json(processed_policy)
 
     def attach_policy_to_role(self, role: iam.Role, policy_name: str, policy_document: iam.PolicyDocument):
