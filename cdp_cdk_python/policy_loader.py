@@ -38,12 +38,14 @@ class PolicyLoader:
         :param policy_name: Name of the policy.
         :param policy_document: The IAM PolicyDocument to attach.
         """
+        print(policy_document.to_string)
+        print(policy_document.to_json)
         try: 
             role.add_to_principal_policy(
                 iam.Policy(
                     self,
                     policy_name,
-                    document=policy_document
+                    document=policy_document.to_string
                 )
             )
         except Exception as e:
