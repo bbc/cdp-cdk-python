@@ -47,8 +47,9 @@ class PolicyLoader:
             )
 
             # Attach the Policy to the IAM Role
+            print("inline_policy before:",inline_policy)
             role.attach_inline_policy(inline_policy)
-
+            print("inline_policy after:",inline_policy)
             # role.attach_inline_policy(iam.Policy(
             #         self,
             #         policy_name,
