@@ -42,7 +42,7 @@ class PolicyLoader:
             iam.Policy(
                 self,
                 policy_name,
-                policy_document
+                document=policy_document
             )
         )
         # role.inline_policies[policy_name] = policy_document
