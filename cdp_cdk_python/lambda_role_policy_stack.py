@@ -32,7 +32,8 @@ class LambdaRolePolicyStack(Stack):
         )
 
         # Attach the policy to the IAM role
-        print(lambda_basic_execution.to_json.__str__)
+        print("lambda_basic_execution:", lambda_basic_execution)
+        print("lambda_basic_execution string:", lambda_basic_execution.to_json.__str__)
         policy_loader.attach_policy_to_role(
             role=iam_role,
             policy_name="LambdaBasicExecutionPolicy",
@@ -43,7 +44,7 @@ class LambdaRolePolicyStack(Stack):
             self, 
             "RoleArn", 
             value=iam_role.role_arn)
-        # core.CfnOutput(
-        #     self, 
-        #     "FunctionArn", 
-        #     value=lambda_basic_execution)
+        core.CfnOutput(
+            self, 
+            "FunctionArn", 
+            value=lambda_basic_execution)
