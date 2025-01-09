@@ -40,6 +40,8 @@ class PolicyLoader:
         """
         role.add_to_principal_policy(
             iam.Policy(
+                self,
+                policy_name,
                 policy_document
             )
         )
