@@ -25,7 +25,8 @@ class PolicyLoader:
         for key, value in variables.items():
             placeholder = f"${{{key}}}"  # e.g., ${bucket_name}
             policy_str = policy_str.replace(placeholder, value)
-
+            print(placeholder)
+            print(value)
         # Convert the processed policy back to JSON and create a PolicyDocument
         processed_policy = json.loads(policy_str)
         try:
