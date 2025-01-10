@@ -33,7 +33,7 @@ class LambdaRolePolicyStack(Stack):
         lambda_basic_execution = iam.PolicyDocument(
             statements=[
                 iam.PolicyStatement(
-                    effect="Allow",
+                    effects=iam.Effect.ALLOW,
                     actions=["logs:CreateLogGroup",
                             "logs:CreateLogStream",
                             "logs:PutLogEvents"],
