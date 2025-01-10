@@ -52,13 +52,15 @@ class LambdaRolePolicyStack(Stack):
             #     "GetSecretValuePolicy",
             #     document=get_secret_value_doc
             # ),
+        )
+        
+        iam_role.attach_inline_policy(
             iam.Policy(
                 self, 
                 "DescribeStatementDocPolicy",
                 document=describe_statement_doc
-            ),
+            )
         )
-        
 
         core.CfnOutput(
             self, 
