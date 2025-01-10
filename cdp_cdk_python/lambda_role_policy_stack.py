@@ -31,13 +31,13 @@ class LambdaRolePolicyStack(Stack):
             variables={}
         )
         
-
-        inline_policy = iam.Policy(
+        iam_role.attach_inline_policy(
+            iam.Policy(
                 self, 
                 "LambdaBasicExecutionPolicy",
                 document=lambda_basic_execution_doc
+            )
         )
-        iam_role.attach_inline_policy(inline_policy)
         
 
         core.CfnOutput(
