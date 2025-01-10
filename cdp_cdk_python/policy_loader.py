@@ -28,6 +28,7 @@ class PolicyLoader:
 
         # Convert the processed policy back to JSON and create a PolicyDocument
         processed_policy = json.loads(policy_str)
+        print(policy_str)
         return iam.PolicyDocument.from_json(processed_policy)
 
     
