@@ -20,8 +20,8 @@ class LambdaRolePolicyStack(Stack):
 
         # Load parameters from the JSON file
         parameter_loader = CfnParameterLoader(self, 'cdp_cdk_python/params/cdp-pii-datashare.json')
-        cluster_name = parameter_loader.get_parameter("ClusterName").value_as_string
-        secret_arn = parameter_loader.get_parameter("SecretArn").value_as_string
+        cluster_name = parameter_loader.get_parameter("ClusterName")
+        secret_arn = parameter_loader.get_parameter("SecretArn")
         print("cluster name:", cluster_name)
         print("secret_arn:", secret_arn)
         # Create an IAM Role
@@ -39,10 +39,10 @@ class LambdaRolePolicyStack(Stack):
             variables={}
         )
 
-        # get_secret_value_doc = policy_loader.load_policy(
-        #     file_name="get_secret_value.json",
-        #     variables={}
-        # )
+        get_secret_value_doc = policy_loader.load_policy(
+            file_name="get_secret_value.json",
+            variables={"SecretArn":secret_arn.value_as_string}
+        )
 
         describe_statement_doc = policy_loader.load_policy(
             file_name="describe_statement.json",
@@ -64,13 +64,16 @@ class LambdaRolePolicyStack(Stack):
                 "LambdaBasicExecutionPolicy",
                 document=lambda_basic_execution_doc
             ),
-            # iam.Policy(
-            #     self, 
-            #     "GetSecretValuePolicy",
-            #     document=get_secret_value_doc
-            # ),
         )
         
+        iam_role.attach_inline_policy(
+            iam.Policy(
+                self, 
+                "GetSecretValuePolicy",
+                document=get_secret_value_doc
+            )
+        )
+
         iam_role.attach_inline_policy(
             iam.Policy(
                 self, 
