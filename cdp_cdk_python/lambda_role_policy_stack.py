@@ -12,11 +12,18 @@ import aws_cdk as core
 import os 
 from constructs import Construct
 from .policy_loader import PolicyLoader
+from .cfn_param_loader import CfnParameterLoader
 
 class LambdaRolePolicyStack(Stack):
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
+        # Load parameters from the JSON file
+        parameter_loader = CfnParameterLoader(self, 'cdp_cdk_python/params/cdp-pii-datashare.json')
+        cluster_name = parameter_loader.get_parameter("ClusterName")
+        secret_arn = parameter_loader.get_parameter("SecretArn")
+        print("cluster name:", cluster_name)
+        print("secret_arn:", secret_arn)
         # Create an IAM Role
         iam_role = iam.Role(
             self, "MyIAMRole",
@@ -43,6 +50,8 @@ class LambdaRolePolicyStack(Stack):
         )
 
         print(os.getenv('CDK_DEFAULT_ACCOUNT')), print(os.getenv('CDK_DEFAULT_REGION')),
+
+        
 
     # Uncomment the next line if you know exactly what Account and Region you
     # want to deploy the stack to. */
