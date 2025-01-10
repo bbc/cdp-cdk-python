@@ -30,32 +30,4 @@ class PolicyLoader:
         processed_policy = json.loads(policy_str)
         return iam.PolicyDocument.from_json(processed_policy)
 
-    def attach_policy_to_role(self, role: iam.Role, policy_name: str, policy_document: iam.PolicyDocument):
-        """
-        Attach a policy document to an IAM role as an inline policy.
-        :param role: IAM Role to attach the policy to.
-        :param policy_name: Name of the policy.
-        :param policy_document: The IAM PolicyDocument to attach.
-        """
-        # try:
-        print("policy_document:",policy_document)
-            # Wrap the PolicyDocument in a Policy
-        inline_policy = iam.Policy(
-                self, 
-                policy_name,
-                document=policy_document
-        )
-
-            # Attach the Policy to the IAM Role
-        print("inline_policy before:",inline_policy)
-        role.attach_inline_policy(inline_policy)
-        print("inline_policy after:",inline_policy)
-            # role.attach_inline_policy(iam.Policy(
-            #         self,
-            #         policy_name,
-            #         document=policy_document
-            #     )
-            # )
-        # except Exception as e:
-        #     print(f"Error: {e}")
-        # role.inline_policies[policy_name] = policy_document
+    
