@@ -35,17 +35,17 @@ class LambdaRolePolicyStack(Stack):
         # Load the policy with variable replacements
         lambda_basic_execution_doc = policy_loader.load_policy(
             file_name="lambda_basic_execution.json",
-            variables={}
+            replacements={}
         )
 
         get_secret_value_doc = policy_loader.load_policy(
             file_name="get_secret_value.json",
-            variables={"SecretArn":"arn:aws:secretsmanager:eu-west-1:977228593394:secret:redshift-int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr-scvpiiadmin-VeQ6oT"}#secret_arn.value_as_string
+            replacements={"SecretArn":"arn:aws:secretsmanager:eu-west-1:977228593394:secret:redshift-int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr-scvpiiadmin-VeQ6oT"}#secret_arn.value_as_string
         )
 
         describe_statement_doc = policy_loader.load_policy(
             file_name="describe_statement.json",
-            variables={}
+            replacements={}
         )
 
         print(os.getenv('CDK_DEFAULT_ACCOUNT')), print(os.getenv('CDK_DEFAULT_REGION')),
