@@ -38,7 +38,7 @@ class PolicyLoader:
         :param policy_document: The IAM PolicyDocument to attach.
         """
         # try:
-
+        print("policy_document:",policy_document)
             # Wrap the PolicyDocument in a Policy
         inline_policy = iam.Policy(
                 self, 
