@@ -64,4 +64,4 @@ class LambdaRolePolicyStack(Stack):
         core.CfnOutput(
             self, 
             "FunctionArn", 
-            value=lambda_basic_execution_doc)
+            value=lambda_basic_execution_doc.to_string)
