@@ -43,12 +43,17 @@ class LambdaRolePolicyStack(Stack):
             replacements={"SecretArn":secret_arn.value_as_string}#"arn:aws:secretsmanager:eu-west-1:977228593394:secret:redshift-int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr-scvpiiadmin-VeQ6oT"
         )
 
+        accout_id = os.getenv('CDK_DEFAULT_ACCOUNT')
+        region = os.getenv('CDK_DEFAULT_REGION')
+        execute_batch_statement_doc = policy_loader.load_policy(
+            file_name="execute_batch_statement.json",
+            replacements={"ClusterName":cluster_name.value_as_string, "AWS::Region":region, "AWS::AccountId":accout_id}
+        )
+
         describe_statement_doc = policy_loader.load_policy(
             file_name="describe_statement.json",
             replacements={}
         )
-
-        print(os.getenv('CDK_DEFAULT_ACCOUNT')), print(os.getenv('CDK_DEFAULT_REGION')),
 
         
 
@@ -76,7 +81,15 @@ class LambdaRolePolicyStack(Stack):
         iam_role.attach_inline_policy(
             iam.Policy(
                 self, 
-                "DescribeStatementDocPolicy",
+                "ExecuteBatchStatementPolicy",
+                document=execute_batch_statement_doc
+            )
+        )
+
+        iam_role.attach_inline_policy(
+            iam.Policy(
+                self, 
+                "DescribeStatementPolicy",
                 document=describe_statement_doc
             )
         )
