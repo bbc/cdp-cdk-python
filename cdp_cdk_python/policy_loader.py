@@ -22,7 +22,9 @@ class PolicyLoader:
         with open(file_path, "r") as f:
             policy_json = json.load(f)
         policy_json = self._replace_refs(policy_json)
+        print(policy_json)
         policy_json = self._replace_placeholders(policy_json)
+        print(policy_json)
         policy_doc = iam.PolicyDocument.from_json(policy_json)
         return policy_doc
     
