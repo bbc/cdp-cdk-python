@@ -40,7 +40,7 @@ class LambdaRolePolicyStack(Stack):
 
         get_secret_value_doc = policy_loader.load_policy(
             file_name="get_secret_value.json",
-            replacements={"SecretArn":"arn:aws:secretsmanager:eu-west-1:977228593394:secret:redshift-int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr-scvpiiadmin-VeQ6oT"}#secret_arn.value_as_string
+            replacements={"SecretArn":secret_arn.value_as_string}#"arn:aws:secretsmanager:eu-west-1:977228593394:secret:redshift-int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr-scvpiiadmin-VeQ6oT"
         )
 
         describe_statement_doc = policy_loader.load_policy(
