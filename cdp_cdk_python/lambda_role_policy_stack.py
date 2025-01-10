@@ -9,6 +9,7 @@ from aws_cdk import (
     
 )
 import aws_cdk as core
+import os 
 from constructs import Construct
 from .policy_loader import PolicyLoader
 
@@ -31,15 +32,22 @@ class LambdaRolePolicyStack(Stack):
             variables={}
         )
 
-        # get_secret_value_doc = policy_loader.load_policy(
-        #     file_name="get_secret_value.json",
-        #     variables={}
-        # )
+        get_secret_value_doc = policy_loader.load_policy(
+            file_name="get_secret_value.json",
+            variables={}
+        )
 
         describe_statement_doc = policy_loader.load_policy(
             file_name="describe_statement.json",
             variables={}
         )
+
+        print(os.getenv('CDK_DEFAULT_ACCOUNT')), print(os.getenv('CDK_DEFAULT_REGION')),
+
+    # Uncomment the next line if you know exactly what Account and Region you
+    # want to deploy the stack to. */
+
+    #env=cdk.Environment(account='123456789012', region='us-east-1'),
         
         iam_role.attach_inline_policy(
             iam.Policy(
