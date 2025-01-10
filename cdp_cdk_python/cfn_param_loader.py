@@ -21,7 +21,7 @@ class CfnParameterLoader:
         """
         try:
             with open(file_path, "r") as file:
-                parameter_data = json.load(file)
+                parameter_data = json.load(file)["parameters"]
 
             cfn_parameters = {}
             for param_name, param_value in parameter_data.items():
