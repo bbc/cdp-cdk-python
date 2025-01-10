@@ -30,13 +30,33 @@ class LambdaRolePolicyStack(Stack):
             file_name="lambda_basic_execution.json",
             variables={}
         )
+
+        get_secret_value_doc = policy_loader.load_policy(
+            file_name="get_secret_value.json",
+            variables={}
+        )
+
+        describe_statement_doc = policy_loader.load_policy(
+            file_name="describe_statement.json",
+            variables={}
+        )
         
         iam_role.attach_inline_policy(
             iam.Policy(
                 self, 
                 "LambdaBasicExecutionPolicy",
                 document=lambda_basic_execution_doc
-            )
+            ),
+            iam.Policy(
+                self, 
+                "GetSecretValuePolicy",
+                document=get_secret_value_doc
+            ),
+            iam.Policy(
+                self, 
+                "DescribeStatementDocPolicy",
+                document=describe_statement_doc
+            ),
         )
         
 
