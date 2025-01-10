@@ -26,21 +26,21 @@ class LambdaRolePolicyStack(Stack):
         policy_loader = PolicyLoader(policy_dir="cdp_cdk_python/policies")
 
         # Load the policy with variable replacements
-        # lambda_basic_execution = policy_loader.load_policy(
-        #     file_name="lambda_basic_execution.json",
-        #     variables={}
-        # )
-        lambda_basic_execution_doc = iam.PolicyDocument(
-            statements=[
-                iam.PolicyStatement(
-                    effect=iam.Effect.ALLOW,
-                    actions=["logs:CreateLogGroup",
-                            "logs:CreateLogStream",
-                            "logs:PutLogEvents"],
-                    resources=["*"]
-                )
-            ]
+        lambda_basic_execution_doc = policy_loader.load_policy(
+            file_name="lambda_basic_execution.json",
+            variables={}
         )
+        # lambda_basic_execution_doc = iam.PolicyDocument(
+        #     statements=[
+        #         iam.PolicyStatement(
+        #             effect=iam.Effect.ALLOW,
+        #             actions=["logs:CreateLogGroup",
+        #                     "logs:CreateLogStream",
+        #                     "logs:PutLogEvents"],
+        #             resources=["*"]
+        #         )
+        #     ]
+        # )
 
         # Attach the policy to the IAM role
         print("lambda_basic_execution doc:", lambda_basic_execution_doc)
