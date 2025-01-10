@@ -28,7 +28,10 @@ class PolicyLoader:
 
         # Convert the processed policy back to JSON and create a PolicyDocument
         processed_policy = json.loads(policy_str)
-        print(policy_str)
-        return iam.PolicyDocument.from_json(processed_policy)
+        try:
+            policy_doc = iam.PolicyDocument.from_json(processed_policy)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}") 
+        return policy_doc
 
     
