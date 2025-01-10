@@ -1,5 +1,6 @@
 import json
 from aws_cdk import aws_iam as iam
+import re
 
 class PolicyLoader:
     def __init__(self, policy_dir: str):
