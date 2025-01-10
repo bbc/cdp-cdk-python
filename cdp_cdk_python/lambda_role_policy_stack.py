@@ -32,10 +32,10 @@ class LambdaRolePolicyStack(Stack):
             variables={}
         )
 
-        get_secret_value_doc = policy_loader.load_policy(
-            file_name="get_secret_value.json",
-            variables={}
-        )
+        # get_secret_value_doc = policy_loader.load_policy(
+        #     file_name="get_secret_value.json",
+        #     variables={}
+        # )
 
         describe_statement_doc = policy_loader.load_policy(
             file_name="describe_statement.json",
