@@ -1,6 +1,7 @@
 import json
 from aws_cdk import aws_iam as iam
 import re
+import aws_cdk as core
 
 class PolicyLoader:
     def __init__(self, policy_dir: str):
@@ -67,11 +68,12 @@ class PolicyLoader:
         """
         if isinstance(obj, str):
             # Replace placeholders like "${Key}" with their values
-            return re.sub(
-                r"\$\{([^}]+)\}",
-                lambda match: self.replacements.get(match.group(1), match.group(0)),
-                obj,
-            )
+            # return re.sub(
+            #     r"\$\{([^}]+)\}",
+            #     lambda match: self.replacements.get(match.group(1), match.group(0)),
+            #     obj,
+            # )
+            return core.Fn.sub(obj, self.replacements)
         elif isinstance(obj, dict):
             return {k: self._replace_placeholders(v) for k, v in obj.items()}
         elif isinstance(obj, list):
