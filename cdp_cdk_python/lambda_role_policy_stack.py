@@ -12,13 +12,15 @@ import aws_cdk as core
 import os 
 from constructs import Construct
 from .policy_loader import PolicyLoader
-from .param_loader import ParameterLoader
+# from .param_loader import ParameterLoader
+from .cfn_param_loader import ParameterLoader
 
 class LambdaRolePolicyStack(Stack):
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # Load parameters from the JSON file
+        # parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/cdp-pii-datashare.json')
         parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/cdp-pii-datashare.json')
         cluster_name = parameter_loader.get_parameter("ClusterName")
         secret_arn = parameter_loader.get_parameter("SecretArn")
@@ -50,14 +52,14 @@ class LambdaRolePolicyStack(Stack):
 
         get_secret_value_doc = policy_loader.load_policy(
             file_name="get_secret_value.json",
-            replacements={"SecretArn":secret_arn}#"arn:aws:secretsmanager:eu-west-1:977228593394:secret:redshift-int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr-scvpiiadmin-VeQ6oT"
+            replacements={"SecretArn":secret_arn.value_as_string}#"arn:aws:secretsmanager:eu-west-1:977228593394:secret:redshift-int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr-scvpiiadmin-VeQ6oT"
         )
 
         accout_id = os.getenv('CDK_DEFAULT_ACCOUNT')
         region = os.getenv('CDK_DEFAULT_REGION')
         execute_batch_statement_doc = policy_loader.load_policy(
             file_name="execute_batch_statement.json",
-            replacements={"ClusterName":cluster_name, "AWS::Region":region, "AWS::AccountId":accout_id}
+            replacements={"ClusterName":cluster_name.value_as_string, "AWS::Region":region, "AWS::AccountId":accout_id}
         )
         # execute_batch_statement_doc = "{'Version': '2012-10-17', 'Statement': [{'Effect': 'Allow', 'Action': ['redshift-data:BatchExecuteStatement', 'redshift-data:ExecuteStatement'], 'Resource': {'Fn::Sub': 'arn:aws:redshift:eu-west-1:977228593394:cluster:int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr'}}]}"
         
