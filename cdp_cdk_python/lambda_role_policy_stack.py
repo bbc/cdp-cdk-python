@@ -49,14 +49,14 @@ class LambdaRolePolicyStack(Stack):
 
         get_secret_value_doc = policy_loader.load_policy(
             file_name="get_secret_value.json",
-            replacements={"SecretArn":secret_arn.value_as_string}#"arn:aws:secretsmanager:eu-west-1:977228593394:secret:redshift-int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr-scvpiiadmin-VeQ6oT"
+            replacements={"SecretArn":core.Token.as_string(secret_arn.value_as_string)}#"arn:aws:secretsmanager:eu-west-1:977228593394:secret:redshift-int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr-scvpiiadmin-VeQ6oT"
         )
 
         accout_id = os.getenv('CDK_DEFAULT_ACCOUNT')
         region = os.getenv('CDK_DEFAULT_REGION')
         execute_batch_statement_doc = policy_loader.load_policy(
             file_name="execute_batch_statement.json",
-            replacements={"ClusterName":cluster_name.value_as_string, "AWS::Region":region, "AWS::AccountId":accout_id}
+            replacements={"ClusterName":core.Token.as_string(cluster_name.value_as_string), "AWS::Region":region, "AWS::AccountId":accout_id}
         )
         
 
