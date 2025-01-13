@@ -11,7 +11,7 @@ class PolicyLoader:
         self.policy_dir = policy_dir
 
     def load_policy(self, file_name: str, replacements: dict) -> iam.PolicyDocument:
-        policy_json = self._do_replace(self, file_name, replacements) 
+        policy_json = self._do_replace(file_name, replacements) 
         try:
             policy_doc = iam.PolicyDocument.from_json(policy_json)
         except Exception as e:
