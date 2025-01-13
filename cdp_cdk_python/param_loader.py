@@ -13,7 +13,7 @@ class ParameterLoader:
         self.parameters = self.load_parameters(file_path)
         
 
-    def load_parameters(self) -> dict:
+    def load_parameters(self, file_path: str) -> dict:
         """
         Load parameters from a CloudFormation parameters JSON file.
 
@@ -21,7 +21,7 @@ class ParameterLoader:
         :return: Dictionary of parameter names and CfnParameter objects.
         """
         try:
-            with open(self.file_path, "r") as file:
+            with open(file_path, "r") as file:
                 parameter_data = json.load(file)["parameters"]
 
             parameters = {}
