@@ -20,11 +20,9 @@ class LambdaRolePolicyStack(Stack):
 
         # Load parameters from the JSON file
         parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/cdp-pii-datashare.json')
-        parameter_loader.load_parameters()
         cluster_name = parameter_loader.get_parameter("ClusterName")
         secret_arn = parameter_loader.get_parameter("SecretArn")
-        # print(cluster_name.value_as_string)
-        # print(secret_arn.value_as_string)
+        
         print(cluster_name)
         print(secret_arn)
 
@@ -52,14 +50,14 @@ class LambdaRolePolicyStack(Stack):
 
         get_secret_value_doc = policy_loader.load_policy(
             file_name="get_secret_value.json",
-            replacements={"SecretArn":core.Token.as_string(secret_arn.value_as_string)}#"arn:aws:secretsmanager:eu-west-1:977228593394:secret:redshift-int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr-scvpiiadmin-VeQ6oT"
+            replacements={"SecretArn":secret_arn}#"arn:aws:secretsmanager:eu-west-1:977228593394:secret:redshift-int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr-scvpiiadmin-VeQ6oT"
         )
 
         accout_id = os.getenv('CDK_DEFAULT_ACCOUNT')
         region = os.getenv('CDK_DEFAULT_REGION')
         execute_batch_statement_doc = policy_loader.load_policy(
             file_name="execute_batch_statement.json",
-            replacements={"ClusterName":core.Token.as_string(cluster_name.value_as_string), "AWS::Region":region, "AWS::AccountId":accout_id}
+            replacements={"ClusterName":cluster_name, "AWS::Region":region, "AWS::AccountId":accout_id}
         )
         
 
