@@ -7,9 +7,12 @@ import aws_cdk as cdk
 
 # from cdp_cdk_python.cdp_cdk_python_stack import CdpCdkPythonStack
 from cdp_cdk_python.lambda_role_policy_stack import LambdaRolePolicyStack
+from cdp_cdk_python.redshift_role_policy_stack import RedshiftRolePolicyStack
 
 app = cdk.App()
-LambdaRolePolicyStack(app, "LambdaRolePolicyStack",
+LambdaRolePolicyStack(app, "LambdaRolePolicyStack")
+# RedshiftRolePolicyStack(app, "RedshiftRolePolicyStack")
+
     # If you don't specify 'env', this stack will be environment-agnostic.
     # Account/Region-dependent features and context lookups will not work,
     # but a single synthesized template can be deployed anywhere.
@@ -25,6 +28,6 @@ LambdaRolePolicyStack(app, "LambdaRolePolicyStack",
     #env=cdk.Environment(account='123456789012', region='us-east-1'),
 
     # For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html
-    )
+    
 
 app.synth()
