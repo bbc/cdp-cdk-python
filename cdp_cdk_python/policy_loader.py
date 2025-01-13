@@ -26,7 +26,7 @@ class PolicyLoader:
         policy_json = self._replace_placeholders(policy_json)
         print(policy_json)
         try:
-            policy_doc = iam.PolicyDocument.from_json(processed_policy)
+            policy_doc = iam.PolicyDocument.from_json(policy_json)
         except Exception as e:
             print(f"An error occurred: {str(e)}") 
         return policy_doc
