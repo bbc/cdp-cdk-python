@@ -38,6 +38,13 @@ class LambdaRolePolicyStack(Stack):
             replacements={}
         )
 
+        
+
+        describe_statement_doc = policy_loader.load_policy(
+            file_name="describe_statement.json",
+            replacements={}
+        )
+
         get_secret_value_doc = policy_loader.load_policy(
             file_name="get_secret_value.json",
             replacements={"SecretArn":secret_arn.value_as_string}#"arn:aws:secretsmanager:eu-west-1:977228593394:secret:redshift-int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr-scvpiiadmin-VeQ6oT"
@@ -45,16 +52,10 @@ class LambdaRolePolicyStack(Stack):
 
         accout_id = os.getenv('CDK_DEFAULT_ACCOUNT')
         region = os.getenv('CDK_DEFAULT_REGION')
-        # execute_batch_statement_doc = policy_loader.load_policy(
-        #     file_name="execute_batch_statement.json",
-        #     replacements={"ClusterName":cluster_name.value_as_string, "AWS::Region":region, "AWS::AccountId":accout_id}
-        # )
-
-        describe_statement_doc = policy_loader.load_policy(
-            file_name="describe_statement.json",
-            replacements={}
+        execute_batch_statement_doc = policy_loader.load_policy(
+            file_name="execute_batch_statement.json",
+            replacements={"ClusterName":cluster_name.value_as_string, "AWS::Region":region, "AWS::AccountId":accout_id}
         )
-
         
 
     # Uncomment the next line if you know exactly what Account and Region you
@@ -78,13 +79,13 @@ class LambdaRolePolicyStack(Stack):
             )
         )
 
-        # iam_role.attach_inline_policy(
-        #     iam.Policy(
-        #         self, 
-        #         "ExecuteBatchStatementPolicy",
-        #         document=execute_batch_statement_doc
-        #     )
-        # )
+        iam_role.attach_inline_policy(
+            iam.Policy(
+                self, 
+                "ExecuteBatchStatementPolicy",
+                document=execute_batch_statement_doc
+            )
+        )
 
         iam_role.attach_inline_policy(
             iam.Policy(
