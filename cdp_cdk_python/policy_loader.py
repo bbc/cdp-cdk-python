@@ -25,7 +25,10 @@ class PolicyLoader:
         print(policy_json)
         policy_json = self._replace_placeholders(policy_json)
         print(policy_json)
-        policy_doc = iam.PolicyDocument.from_json(policy_json)
+        try:
+            policy_doc = iam.PolicyDocument.from_json(processed_policy)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}") 
         return policy_doc
     
     def _replace_refs(self, obj):
