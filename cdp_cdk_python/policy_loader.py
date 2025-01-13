@@ -14,7 +14,7 @@ class PolicyLoader:
         policy_json = self._do_replace(file_name, replacements) 
         try:
             print(policy_json)
-            policy_doc = iam.PolicyDocument.from_json(policy_json)
+            policy_doc = iam.PolicyDocument.from_json(json.loads(policy_json))
         except Exception as e:
             print(f"An error occurred: {str(e)}") 
         return policy_doc
