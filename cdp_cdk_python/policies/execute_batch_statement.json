@@ -8,7 +8,7 @@
                 "redshift-data:ExecuteStatement"
             ],
             "Resource": {
-                "Fn::Sub": "arn:aws:redshift:${AWS::Region}:${AWS::AccountId}:cluster:${ClusterName}"
+                "Fn::Sub": "arn:aws:redshift:${AWS::Region}:${AWS::AccountId}:cluster:int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr"
             }
         }
     ]
