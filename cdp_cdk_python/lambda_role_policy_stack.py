@@ -56,7 +56,7 @@ class LambdaRolePolicyStack(Stack):
         region = os.getenv('CDK_DEFAULT_REGION')
         execute_batch_statement_doc = policy_loader.load_policy(
             file_name="execute_batch_statement.json",
-            replacements={"ClusterName":core.Lazy.string(lambda:cluster_name.value_as_string), "AWS::Region":region, "AWS::AccountId":accout_id}
+            replacements={"ClusterName":core.Token.as_string(cluster_name.value_as_string), "AWS::Region":region, "AWS::AccountId":accout_id}
         )
         
 
