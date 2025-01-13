@@ -59,7 +59,7 @@ class LambdaRolePolicyStack(Stack):
         region = os.getenv('CDK_DEFAULT_REGION')
         execute_batch_statement_doc = policy_loader.load_policy(
             file_name="execute_batch_statement.json",
-            replacements={"ClusterName":cluster_name.value_as_string, "AWS::Region":region, "AWS::AccountId":accout_id}
+            replacements={"ClusterName":cluster_name, "AWS::Region":region, "AWS::AccountId":accout_id}
         )
         # execute_batch_statement_doc = "{'Version': '2012-10-17', 'Statement': [{'Effect': 'Allow', 'Action': ['redshift-data:BatchExecuteStatement', 'redshift-data:ExecuteStatement'], 'Resource': {'Fn::Sub': 'arn:aws:redshift:eu-west-1:977228593394:cluster:int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr'}}]}"
         
