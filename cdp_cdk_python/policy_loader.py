@@ -11,6 +11,14 @@ class PolicyLoader:
         self.policy_dir = policy_dir
 
     def load_policy(self, file_name: str, replacements: dict) -> iam.PolicyDocument:
+        policy_json = self._do_replace(self, file_name, replacements) 
+        try:
+            policy_doc = iam.PolicyDocument.from_json(policy_json)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}") 
+        return policy_doc
+
+    def _do_replace(self, file_name: str, replacements: dict) -> str:
         """
         Load an IAM policy file and replace placeholders with provided variables.
         :param file_name: Name of the policy JSON file.
@@ -25,11 +33,8 @@ class PolicyLoader:
         print(policy_json)
         policy_json = self._replace_placeholders(policy_json)
         print(policy_json)
-        try:
-            policy_doc = iam.PolicyDocument.from_json(json.dumps(policy_json))
-        except Exception as e:
-            print(f"An error occurred: {str(e)}") 
-        return policy_doc
+        return policy_json
+        
     
     def _replace_refs(self, obj):
         """
