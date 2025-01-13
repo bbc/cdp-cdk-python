@@ -22,6 +22,8 @@ class LambdaRolePolicyStack(Stack):
         parameter_loader = CfnParameterLoader(self, 'cdp_cdk_python/params/cdp-pii-datashare.json')
         cluster_name = parameter_loader.get_parameter("ClusterName")
         secret_arn = parameter_loader.get_parameter("SecretArn")
+        print(cluster_name)
+        print(secret_arn)
         
         # Create an IAM Role
         iam_role = iam.Role(
