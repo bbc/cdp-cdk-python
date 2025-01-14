@@ -80,7 +80,7 @@ class PolicyLoader:
                 '{"Fn::Sub":',
                 obj
             )
-            print(obj)
+            print('obj:',obj)
             return core.Fn.sub(obj)
             # return regexSub.replace('','')
             # return core.Fn.sub(obj, self.replacements)
