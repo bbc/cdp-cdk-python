@@ -55,13 +55,30 @@ class LambdaRolePolicyStack(Stack):
             replacements={"SecretArn":secret_arn}#"arn:aws:secretsmanager:eu-west-1:977228593394:secret:redshift-int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr-scvpiiadmin-VeQ6oT"
         )
 
-        accout_id = os.getenv('CDK_DEFAULT_ACCOUNT')
+        account_id = os.getenv('CDK_DEFAULT_ACCOUNT')
         region = os.getenv('CDK_DEFAULT_REGION')
         execute_batch_statement_doc = policy_loader.load_policy(
             file_name="execute_batch_statement.json",
-            replacements={"ClusterName":cluster_name, "AWS::Region":region, "AWS::AccountId":accout_id}
+            replacements={"ClusterName":cluster_name, "AWS::Region":region, "AWS::AccountId":account_id}
         )
-        # execute_batch_statement_doc = "{'Version': '2012-10-17', 'Statement': [{'Effect': 'Allow', 'Action': ['redshift-data:BatchExecuteStatement', 'redshift-data:ExecuteStatement'], 'Resource': {'Fn::Sub': 'arn:aws:redshift:eu-west-1:977228593394:cluster:int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr'}}]}"
+        execute_batch_statement_doc = iam.PolicyDocument.from_json(
+            {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Action": [
+                            "redshift-data:BatchExecuteStatement",
+                            "redshift-data:ExecuteStatement"
+                        ],
+                        "Resource": {
+                            "Fn::Sub": "arn:aws:redshift:${AWS::Region}:${AWS::AccountId}:cluster:${ClusterName}"
+                        }
+                    }
+                ]
+            }
+
+        )
         
 
     # Uncomment the next line if you know exactly what Account and Region you
