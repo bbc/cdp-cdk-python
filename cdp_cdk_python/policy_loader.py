@@ -69,12 +69,14 @@ class PolicyLoader:
         """
         if isinstance(obj, str):
             # Replace placeholders like "${Key}" with their values
-            # return re.sub(
-            #     r"\$\{([^}]+)\}",
-            #     lambda match: self.replacements.get(match.group(1), match.group(0)),
-            #     obj,
-            # )
-            return core.Fn.sub(obj, self.replacements)
+            regexSub = re.sub(
+                r"\$\{([^}]+)\}",
+                lambda match: self.replacements.get(match.group(1), match.group(0)),
+                obj,
+            )
+            return core.Fn.sub(regexSub)
+            # return regexSub.replace('','')
+            # return core.Fn.sub(obj, self.replacements)
         elif isinstance(obj, dict):
             return {k: self._replace_placeholders(v) for k, v in obj.items()}
         elif isinstance(obj, list):
