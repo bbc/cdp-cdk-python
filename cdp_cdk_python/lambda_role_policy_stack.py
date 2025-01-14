@@ -103,7 +103,7 @@ class LambdaRolePolicyStack(Stack):
         )
 
         iam_role.attach_inline_policy(
-            iam.Policy(
+            iam.CfnPolicy(
                 self, 
                 "ExecuteBatchStatementPolicy",
                 document=execute_batch_statement_doc
