@@ -57,10 +57,10 @@ class LambdaRolePolicyStack(Stack):
 
         account_id = os.getenv('CDK_DEFAULT_ACCOUNT')
         region = os.getenv('CDK_DEFAULT_REGION')
-        execute_batch_statement_doc = policy_loader.load_policy(
-            file_name="execute_batch_statement.json",
-            replacements={"ClusterName":cluster_name, "AWS::Region":region, "AWS::AccountId":account_id}
-        )
+        # execute_batch_statement_doc = policy_loader.load_policy(
+        #     file_name="execute_batch_statement.json",
+        #     replacements={"ClusterName":cluster_name, "AWS::Region":region, "AWS::AccountId":account_id}
+        # )
         execute_batch_statement_doc = iam.PolicyDocument.from_json(
             {
                 "Version": "2012-10-17",
