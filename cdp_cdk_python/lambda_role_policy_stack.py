@@ -61,8 +61,7 @@ class LambdaRolePolicyStack(Stack):
         #     file_name="execute_batch_statement.json",
         #     replacements={"ClusterName":cluster_name, "AWS::Region":region, "AWS::AccountId":account_id}
         # )
-        execute_batch_statement_doc = iam.PolicyDocument.from_json(
-            {
+        execute_batch_statement_doc = {
                 "Version": "2012-10-17",
                 "Statement": [
                     {
@@ -78,7 +77,7 @@ class LambdaRolePolicyStack(Stack):
                 ]
             }
 
-        )
+        
         
 
     # Uncomment the next line if you know exactly what Account and Region you
