@@ -101,14 +101,14 @@ class LambdaRolePolicyStack(Stack):
             )
         )
 
-        iam_role.attach_inline_policy(
-            iam.CfnPolicy(
+        iam.CfnPolicy(
                 self, 
                 "ExecuteBatchStatementPolicy",
                 policy_name="ExecuteBatchStatementPolicy",
-                policy_document=execute_batch_statement_doc
-            )
+                policy_document=execute_batch_statement_doc,
+                roles=[iam_role]
         )
+        
 
         iam_role.attach_inline_policy(
             iam.Policy(
