@@ -31,6 +31,7 @@ class PolicyLoader:
         file_path = f"{self.policy_dir}/{file_name}"
         with open(file_path, "r") as f:
             policy_json = json.load(f)
+        print(policy_json)
         policy_json = self._replace_refs(policy_json)
         print(policy_json)
         policy_json = self._replace_placeholders(policy_json)
