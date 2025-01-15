@@ -81,7 +81,7 @@ class PolicyLoader:
                 obj
             )
             print('obj:',obj)
-            return core.Fn.sub(obj)
+            return obj
             # return regexSub.replace('','')
             # return core.Fn.sub(obj, self.replacements)
         elif isinstance(obj, dict):
