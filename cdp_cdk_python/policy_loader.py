@@ -39,7 +39,7 @@ class PolicyLoader:
         policy_json = re.sub(
                 r"\{'Fn::Sub':",
                 '{"Fn::Sub":',
-                policy_json
+                policy_json.__str__
             )
         print(policy_json)
         return policy_json
