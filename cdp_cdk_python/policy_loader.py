@@ -74,7 +74,7 @@ class PolicyLoader:
                 lambda match: self.replacements.get(match.group(1), match.group(0)),
                 obj,
             )
-            print(obj)
+            print('obj:',obj)
             obj = re.sub(
                 r"\{'Fn::Sub':",
                 '{"Fn::Sub":',
