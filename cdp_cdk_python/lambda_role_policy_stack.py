@@ -78,7 +78,7 @@ class LambdaRolePolicyStack(Stack):
         #         ]
         #     }
 
-        )
+        # )
         
 
     # Uncomment the next line if you know exactly what Account and Region you
