@@ -147,6 +147,7 @@ class LambdaRolePolicyStack(Stack):
             code=_lambda.Code.from_asset("cdp_cdk_python/lambda_function"),
             timeout=core.Duration.minutes(15),
             memory_size=memory_param.value_as_number,
+            role=iam_role
         )
 
         core.CfnOutput(
