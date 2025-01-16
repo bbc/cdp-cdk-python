@@ -122,7 +122,34 @@ class LambdaRolePolicyStack(Stack):
             self, 
             "RoleArn", 
             value=iam_role.role_arn)
-        # core.CfnOutput(
-        #     self, 
-        #     "FunctionArn", 
-        #     value=lambda_basic_execution_doc.to_json.__str__)
+        
+        # Define a parameter for Lambda memory size
+        memory_param = core.CfnParameter(
+            self,
+            "MemorySize",
+            type="Number",
+            description="Memory size for the Lambda function in MB",
+            default=128,  # Default memory size
+            min_value=128,
+            max_value=10240,  # Maximum memory supported by AWS Lambda
+        )
+
+        fn = _lambda.Function(
+            self, 
+            "MyFunction",
+            runtime=_lambda.Runtime.PYTHON_3_9,
+            handler="lambda_function.lambda_handler",
+            # environment={
+                # "CodeVersionString": 1.0,
+                # "REGION": core.Stack.region,
+                # "AVAILABILITY_ZONES": json.dumps(core.Stack.availability_zones),
+            # },
+            code=_lambda.Code.from_asset("cdp_cdk_python/lambda_function"),
+            timeout=core.Duration.minutes(15),
+            memory_size=memory_param.value_as_number,
+        )
+
+        core.CfnOutput(
+            self, 
+            "FunctionArn", 
+            value=fn.function_arn)
