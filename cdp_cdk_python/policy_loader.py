@@ -35,7 +35,7 @@ class PolicyLoader:
         policy_json = self._replace_refs(policy_json)
         print(policy_json)
         policy_json = self._replace_placeholders(policy_json)
-        print(str(policy_json))
+        # print(str(policy_json))
         # policy_json = re.sub(
         #         r"\{'Fn::Sub':",
         #         '{"Fn::Sub":',
@@ -81,7 +81,6 @@ class PolicyLoader:
                 obj,
             )
             print('obj:',obj)
-            
             return obj
             # return regexSub.replace('','')
             # return core.Fn.sub(obj, self.replacements)
