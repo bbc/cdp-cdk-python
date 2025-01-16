@@ -13,12 +13,12 @@ class PolicyLoader:
 
     def load_policy(self, file_name: str, replacements: dict) -> iam.PolicyDocument:
         policy_json = self._do_replace(file_name, replacements) 
-        print(str(policy_json))
-        policy_json = re.sub(
-                r"\{'Fn::Sub':",
-                '{"Fn::Sub":',
-                str(policy_json)
-            )
+        # print(str(policy_json))
+        # policy_json = re.sub(
+        #         r"\{'Fn::Sub':",
+        #         '{"Fn::Sub":',
+        #         str(policy_json)
+        #     )
         try:
             policy_doc = iam.PolicyDocument.from_json(policy_json)
         except Exception as e:
