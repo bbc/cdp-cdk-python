@@ -41,10 +41,10 @@ pipeline {
 
     post {
         success {
-            echo "CDK deployment completed successfully!"
+            echo "Pipeline execution completed successfully!"
         }
         failure {
-            echo "CDK deployment failed."
+            echo "Pipeline execution failed."
         }
     }
 }
