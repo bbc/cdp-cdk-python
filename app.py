@@ -11,7 +11,7 @@ from cdp_cdk_python.redshift_role_policy_stack import RedshiftRolePolicyStack
 
 app = cdk.App()
 LambdaRolePolicyStack(app, "LambdaRolePolicyStack")
-# RedshiftRolePolicyStack(app, "RedshiftRolePolicyStack")
+RedshiftRolePolicyStack(app, "RedshiftRolePolicyStack")
 
     # If you don't specify 'env', this stack will be environment-agnostic.
     # Account/Region-dependent features and context lookups will not work,

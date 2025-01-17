@@ -5,8 +5,7 @@ from aws_cdk import (
     aws_s3 as s3,
     aws_iam as iam,
     aws_lambda as _lambda,
-    # aws_redshiftserverless as redshiftserverless,
-    
+    aws_redshiftserverless as redshiftserverless
 )
 import aws_cdk as core
 from constructs import Construct
@@ -14,7 +13,7 @@ from constructs import Construct
 import os 
 import json
 from aws_cdk.cloudformation_include import CfnInclude
-
+from aws_cdk.aws_redshift import 
 class RedshiftRolePolicyStack(Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
@@ -80,37 +79,37 @@ class RedshiftRolePolicyStack(Stack):
             )
         )
 
-        # # Create Redshift Serverless Namespace
-        # namespace = redshiftserverless.CfnNamespace(
-        #     self, "RedshiftNamespace",
-        #     namespace_name="my-redshift-namespace",
-        #     admin_username="admin",
-        #     admin_user_password="YourSecurePassword123!",  # Use Secrets Manager for production
-        #     iam_roles=[redshift_role.role_arn]
-        # )
+        # Create Redshift Serverless Namespace
+        namespace = redshiftserverless.CfnNamespace(
+            self, "RedshiftNamespace",
+            namespace_name="my-redshift-namespace",
+            admin_username="admin",
+            admin_user_password="YourSecurePassword123!",  # Use Secrets Manager for production
+            iam_roles=[redshift_role.role_arn]
+        )
 
-        # # Create Redshift Serverless Workgroup
-        # workgroup = redshiftserverless.CfnWorkgroup(
-        #     self, "RedshiftWorkgroup",
-        #     workgroup_name="my-redshift-workgroup",
-        #     namespace_name=namespace.namespace_name,
-        #     base_capacity=32,  # Base capacity in Redshift Processing Units (RPUs)
-        #     publicly_accessible=True,
-        #     subnet_ids=["subnet-xxxxxxx", "subnet-yyyyyyy"],  # Replace with actual subnet IDs
-        #     security_group_ids=["sg-zzzzzzzz"]  # Replace with actual security group IDs
-        # )
+        # Create Redshift Serverless Workgroup
+        workgroup = redshiftserverless.CfnWorkgroup(
+            self, "RedshiftWorkgroup",
+            workgroup_name="my-redshift-workgroup",
+            namespace_name=namespace.namespace_name,
+            base_capacity=32,  # Base capacity in Redshift Processing Units (RPUs)
+            publicly_accessible=True,
+            subnet_ids=["subnet-xxxxxxx", "subnet-yyyyyyy"],  # Replace with actual subnet IDs
+            security_group_ids=["sg-zzzzzzzz"]  # Replace with actual security group IDs
+        )
 
-        print('lambda path: %s' % os.path.join(dirname, "./mle-non-pii-redshift-role-template.json")) 
-        print('lambda path: %s' % os.path.join(dirname, "lambda_function.py.zip")) 
-        print('cwd: %s' % cwd) 
         
         
         
-    
-        # core.CfnOutput(
-        #     self, 
-        #     "WorkgroupEndpoint", 
-        #     value=workgroup.attr_endpoint_address)
+        core.CfnOutput(
+            self, 
+            "WorkgroupEndpoint", 
+            value=namespace.namespace_name)
+        core.CfnOutput(
+            self, 
+            "WorkgroupEndpoint", 
+            value=workgroup.attr_endpoint_address)
         core.CfnOutput(
             self, 
             "RoleArn1", 
@@ -119,7 +118,4 @@ class RedshiftRolePolicyStack(Stack):
             self, 
             "RoleArn2", 
             value=redshift_role.role_arn)
-        core.CfnOutput(
-            self, 
-            "FunctionArn", 
-            value=fn.function_arn)
+        
