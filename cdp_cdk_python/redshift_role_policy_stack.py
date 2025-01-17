@@ -14,7 +14,7 @@ from constructs import Construct
 import os 
 import json
 from aws_cdk.cloudformation_include import CfnInclude
-from aws_cdk.aws_redshift import 
+
 class RedshiftRolePolicyStack(Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
