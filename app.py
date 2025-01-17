@@ -5,12 +5,11 @@ import os
 # sys.path += ['/usr/local/lib/python3.12/site-packages','/var/lib/jenkins/.local/lib/python3.12/site-packages']
 import aws_cdk as cdk
 
-# from cdp_cdk_python.cdp_cdk_python_stack import CdpCdkPythonStack
-from cdp_cdk_python.lambda_role_policy_stack import LambdaRolePolicyStack
+# from cdp_cdk_python.lambda_role_policy_stack import LambdaRolePolicyStack
 from cdp_cdk_python.redshift_role_policy_stack import RedshiftRolePolicyStack
 
 app = cdk.App()
-LambdaRolePolicyStack(app, "LambdaRolePolicyStack")
+# LambdaRolePolicyStack(app, "LambdaRolePolicyStack")
 RedshiftRolePolicyStack(app, "RedshiftRolePolicyStack")
 
     # If you don't specify 'env', this stack will be environment-agnostic.
