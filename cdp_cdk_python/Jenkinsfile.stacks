@@ -8,7 +8,7 @@ pipeline {
     }
 
     parameters {
-        booleanParam(name: 'PROCEED_TO_DEPLOY', defaultValue: false, description: 'Select Yes to proceed to deployment after synthesizing.')
+        booleanParam(name: 'PROCEED_TO_DEPLOY', defaultValue: true, description: 'Select Yes to proceed to deployment after synthesizing.')
     }
 
     stages {
@@ -21,6 +21,11 @@ pipeline {
             steps {
                 //  Use Python3, activate venv, install Python dependencies, synthesize the CDK app 
                 sh 'virtualenv -p /usr/bin/python3 venv && source venv/bin/activate && pip install -r requirements.txt && cdk synth'
+            }
+            steps {
+                script {
+                    echo "PROCEED_TO_DEPLOY is set to: ${params.PROCEED_TO_DEPLOY}"
+                }
             }
         }
         stage('Confirm Deployment') {
