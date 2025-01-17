@@ -5,7 +5,8 @@ from aws_cdk import (
     aws_s3 as s3,
     aws_iam as iam,
     aws_lambda as _lambda,
-    aws_redshiftserverless as redshiftserverless
+    # aws_redshiftserverless as redshiftserverless
+    aws_redshift as redshift
 )
 import aws_cdk as core
 from constructs import Construct
@@ -80,7 +81,7 @@ class RedshiftRolePolicyStack(Stack):
         )
 
         # Create Redshift Serverless Namespace
-        namespace = redshiftserverless.CfnNamespace(
+        namespace = redshift.CfnNamespace(
             self, "RedshiftNamespace",
             namespace_name="my-redshift-namespace",
             admin_username="admin",
@@ -89,7 +90,7 @@ class RedshiftRolePolicyStack(Stack):
         )
 
         # Create Redshift Serverless Workgroup
-        workgroup = redshiftserverless.CfnWorkgroup(
+        workgroup = redshift.CfnWorkgroup(
             self, "RedshiftWorkgroup",
             workgroup_name="my-redshift-workgroup",
             namespace_name=namespace.namespace_name,
