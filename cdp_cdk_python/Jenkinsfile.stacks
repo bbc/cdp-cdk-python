@@ -20,7 +20,7 @@ pipeline {
         stage('Activate env, install dependencies and synthesize') {
             steps {
                 //  Use Python3, activate venv, install Python dependencies, synthesize the CDK app 
-                sh 'virtualenv -p /usr/bin/python3.10 venv && python3.10 --version && source venv/bin/activate && pip install -r requirements.txt && cdk synth'
+                sh 'virtualenv -p /usr/bin/python3.9 venv && python3.9 --version && source venv/bin/activate && pip install -r requirements.txt && cdk synth'
             }
         }
         stage('Confirm Deployment') {
