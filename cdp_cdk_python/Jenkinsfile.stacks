@@ -33,7 +33,7 @@ pipeline {
                 script {
                     echo "Proceeding to 'cdk deploy' as PROCEED_TO_DEPLOY is true..."
                     //  deploy the CDK stack
-                    sh 'virtualenv -p /usr/bin/python3 venv && source venv/bin/activate && pip install -r requirements.txt && cdk deploy --require-approval never'
+                    sh 'source venv/bin/activate && cdk deploy --require-approval never'
                 }
             }
         }
