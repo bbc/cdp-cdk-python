@@ -7,6 +7,9 @@ pipeline {
         // PYTHONPATH= '/usr/local/lib/python3.12/site-packages:/var/lib/jenkins/.local/lib/python3.12/site-packages'
     }
 
+    parameters {
+        booleanParam(name: 'PROCEED_TO_DEPLOY', defaultValue: false, description: 'Select Yes to proceed to deployment after synthesizing.')
+    }
 
     stages {
         stage('Checkout Code') {
@@ -14,10 +17,24 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Check env') {
+        stage('Activate env, install dependencies and synthesize') {
             steps {
-                //  Use Python3, activate venv, install Python dependencies, synthesize the CDK app and deploy the CDK stack
-                sh 'virtualenv -p /usr/bin/python3 venv && source venv/bin/activate && pip install -r requirements.txt && cdk synth && cdk deploy --require-approval never'
+                //  Use Python3, activate venv, install Python dependencies, synthesize the CDK app 
+                sh 'virtualenv -p /usr/bin/python3 venv && source venv/bin/activate && pip install -r requirements.txt && cdk synth'
+            }
+        }
+        stage('Confirm Deployment') {
+            when {
+                expression {
+                    params.PROCEED_TO_DEPLOY
+                }
+            }
+            steps {
+                script {
+                    echo "Proceeding to 'cdk deploy' as PROCEED_TO_DEPLOY is true..."
+                    //  deploy the CDK stack
+                    sh 'cdk deploy --require-approval never'
+                }
             }
         }
     }
