@@ -20,7 +20,7 @@ pipeline {
         stage('Activate env, install dependencies and synthesize') {
             steps {
                 //  Use Python3, activate venv, install Python dependencies, synthesize the CDK app 
-                sh 'python3.12 -m venv new_venv && source new_venv/bin/activate && python3 --version && pip install -r requirements.txt && python3 --version  && cdk synth'
+                sh 'python3.12 -m venv venv && source venv/bin/activate && python3 --version && pip install -r requirements.txt && python3 --version  && cdk synth'
             }
         }
         stage('Confirm Deployment') {
@@ -33,7 +33,7 @@ pipeline {
                 script {
                     echo "Proceeding to 'cdk deploy' as PROCEED_TO_DEPLOY is true..."
                     //  deploy the CDK stack
-                    sh 'source venv/bin/activate && python3 --version && source new_venv/bin/activate && python3 --version && cdk deploy --require-approval never'
+                    sh 'source venv/bin/activate && python3 --version && source venv/bin/activate && python3 --version && cdk deploy --require-approval never'
                 }
             }
         }
