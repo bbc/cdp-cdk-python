@@ -33,7 +33,7 @@ pipeline {
                 script {
                     echo "Proceeding to 'cdk deploy' as PROCEED_TO_DEPLOY is true..."
                     //  deploy the CDK stack
-                    sh 'source new-venv/bin/activate && cdk deploy --require-approval never'
+                    sh 'source new-venv/bin/activate && cdk deploy --require-approval never --all'
                 }
             }
         }
