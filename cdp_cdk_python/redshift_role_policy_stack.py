@@ -77,7 +77,7 @@ class RedshiftRolePolicyStack(Stack):
         namespace_name = parameter_loader.get_parameter("NamespaceName")
         workgroup_name = parameter_loader.get_parameter("WorkgroupName")
         db_name = parameter_loader.get_parameter("DatabaseName")
-        base_capacity = parameter_loader.get_parameter("BaseRPU")
+        base_capacity = core.CfnParameter(self, "BaseRPU", type="Number", default=parameter_loader.get_parameter("BaseRPU"))
         publicly_accessible = parameter_loader.get_parameter("PubliclyAccessible")
         enhanced_vpc_routing = parameter_loader.get_parameter("EnhancedVpcRouting")
         print("vpc_id:",vpc_id)
