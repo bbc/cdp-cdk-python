@@ -1,0 +1,19 @@
+{
+  "aws_account_id": "977228593394",
+  "region": "eu-west-1",
+  "main_stack": false,
+  "parameters": {
+    "DatabaseName": "dev",
+    "AdminUsername": "admin",
+    "NamespaceName": "mynamespace",
+    "WorkgroupName": "myworkgroup",
+    "BaseRPU": "128",
+    "PubliclyAccessible": "False",
+    "VpcId": "vpc-b7f44ad2",
+    "SubnetId": "subnet-e02e4485,subnet-7ec37727,subnet-a91b88de,subnet-aa1b88dd,subnet-71c37728,subnet-e32e4486",
+    "IAMRole": "arn:aws:iam::977228593394:role/int-cdp-RedshiftPIIRole",
+    "LogExportsList": "userlog,connectionlog,useractivitylog",
+    "EnhancedVpcRouting": "False",
+    "SecretName":"CDPRedshiftServerlessSecretsName"
+  }
+}

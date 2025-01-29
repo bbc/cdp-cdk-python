@@ -6,6 +6,7 @@ from aws_cdk import (
     aws_iam as iam,
     aws_lambda as _lambda,
     aws_redshift as redshift,
+    aws_ec2 as ec2,
     aws_redshiftserverless as redshiftserverless
 )
 
@@ -14,6 +15,7 @@ from constructs import Construct
 import os 
 import json
 from aws_cdk.cloudformation_include import CfnInclude
+from .cfn_param_loader import ParameterLoader
 
 class RedshiftRolePolicyStack(Stack):
 
@@ -80,6 +82,11 @@ class RedshiftRolePolicyStack(Stack):
             )
         )
 
+        parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/cdp-pii-datashare.json')
+        vpc_id = parameter_loader.get_parameter("VpcId")
+        subnet_ids = parameter_loader.get_parameter("SubnetId")
+        secret_name = parameter_loader.get_parameter("SecretName")
+
         # Create Redshift Serverless Namespace
         namespace = redshiftserverless.CfnNamespace(
             self, "RedshiftNamespace",
@@ -89,15 +96,36 @@ class RedshiftRolePolicyStack(Stack):
             iam_roles=[redshift_role.role_arn]
         )
 
+        redshift_sg = ec2.SecurityGroup(
+            self, "RedshiftSG",
+            vpc=vpc_id,
+            description="Allow Redshift Serverless traffic"
+        )
+
+        # 🚪 Allow inbound traffic on Redshift's default port (5439)
+        redshift_sg.add_ingress_rule(
+            ec2.Peer.any_ipv4(),  # Change this to restrict access
+            ec2.Port.tcp(5439),
+            "Allow Redshift inbound traffic",
+            from_port=5439
+        )
+
+        redshift_sg.add_egress_rule(
+            ec2.Peer.any_ipv4(),  # Change this to restrict access
+            ec2.Port.tcp(5439),
+            "Allow Redshift inbound traffic",
+            from_port=5439
+        )
+
         # Create Redshift Serverless Workgroup
         workgroup = redshiftserverless.CfnWorkgroup(
             self, "RedshiftWorkgroup",
             workgroup_name="my-redshift-workgroup",
             namespace_name=namespace.namespace_name,
             base_capacity=32,  # Base capacity in Redshift Processing Units (RPUs)
-            publicly_accessible=True,
-            subnet_ids=["subnet-xxxxxxx", "subnet-yyyyyyy"],  # Replace with actual subnet IDs
-            security_group_ids=["sg-zzzzzzzz"]  # Replace with actual security group IDs
+            publicly_accessible=False,
+            subnet_ids=["subnet-03cbf98aa73d606dd", "subnet-0c2f248e008785559", "subnet-0c30c2b421ce0f84a"],  
+            security_group_ids=[redshift_sg.security_group_id]  
         )
 
         
