@@ -76,6 +76,10 @@ class RedshiftRolePolicyStack(Stack):
         vpc_id = parameter_loader.get_parameter("VpcId")
         namespace_name = parameter_loader.get_parameter("NamespaceName")
         workgroup_name = parameter_loader.get_parameter("WorkgroupName")
+        db_name = parameter_loader.get_parameter("DatabaseName")
+        base_capacity = parameter_loader.get_parameter("BaseRPU")
+        publicly_accessible = parameter_loader.get_parameter("PubliclyAccessible")
+        enhanced_vpc_routing = parameter_loader.get_parameter("EnhancedVpcRouting")
         print("vpc_id:",vpc_id)
         subnet_ids = parameter_loader.get_parameter("SubnetId")
         secret_name = parameter_loader.get_parameter("SecretName")
@@ -88,6 +92,7 @@ class RedshiftRolePolicyStack(Stack):
             namespace_name=namespace_name,
             admin_username="admin",
             admin_user_password="YourSecurePassword123!",  # Use Secrets Manager for production
+            db_name=db_name,
             iam_roles=[redshift_role.role_arn]
         )
 
@@ -115,8 +120,9 @@ class RedshiftRolePolicyStack(Stack):
             self, "RedshiftWorkgroup",
             workgroup_name=workgroup_name,
             namespace_name=namespace_name,
-            base_capacity=32,  # Base capacity in Redshift Processing Units (RPUs)
-            publicly_accessible=False,
+            base_capacity=base_capacity,  # Base capacity in Redshift Processing Units (RPUs)
+            publicly_accessible=publicly_accessible,
+            enhanced_vpc_routing=enhanced_vpc_routing
             subnet_ids=["subnet-03cbf98aa73d606dd", "subnet-0c2f248e008785559", "subnet-0c30c2b421ce0f84a"],  
             security_group_ids=[redshift_sg.attr_group_id]  
         )
