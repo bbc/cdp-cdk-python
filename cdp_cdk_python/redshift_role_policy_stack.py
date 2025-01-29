@@ -7,7 +7,8 @@ from aws_cdk import (
     aws_lambda as _lambda,
     aws_redshift as redshift,
     aws_ec2 as ec2,
-    aws_redshiftserverless as redshiftserverless
+    aws_redshiftserverless as redshiftserverless,
+    aws_secretsmanager as secretsmanager
 )
 
 import aws_cdk as core
@@ -84,16 +85,25 @@ class RedshiftRolePolicyStack(Stack):
         is_enhanced_vpc_routing = enhanced_vpc_routing.lower() == "true"
         subnet_ids = core.CfnParameter(self, "SubnetId", type="CommaDelimitedList", default=parameter_loader.get_parameter("SubnetId"))
         print("subnet_ids:",subnet_ids)
-        secret_name = parameter_loader.get_parameter("SecretName")
-
         
+        secret_name = parameter_loader.get_parameter("SecretName")
+        secret_arn = core.Fn.import_value(secret_name+"ARN")
+
+        # 🔹 Retrieve the secret dynamically
+        secret = secretsmanager.Secret.from_secret_complete_arn(self, "ImportedSecret", secret_arn)
+
+        # 🔹 Use the secret (example: Redshift Workgroup)
+        core.CfnOutput(self, "RetrievedSecretARN",
+            value=secret.secret_arn,
+            description="The ARN of the imported secret"
+        )
 
         # Create Redshift Serverless Namespace
         namespace = redshiftserverless.CfnNamespace(
             self, "RedshiftNamespace",
             namespace_name=namespace_name,
             admin_username="admin",
-            admin_user_password="YourSecurePassword123!",  # Use Secrets Manager for production
+            admin_user_password=secret.secret_name,  # "YourSecurePassword123!"
             db_name=db_name,
             iam_roles=[redshift_role.role_arn]
         )
