@@ -1,5 +1,9 @@
 import aws_cdk as core
-import aws_cdk.aws_secretsmanager as secretsmanager
+from aws_cdk import (
+    # Duration,
+    Stack,
+    aws_secretsmanager as secretsmanager
+)
 
 class SecretsManagerStack(cdk.Stack):
 
