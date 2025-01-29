@@ -22,16 +22,6 @@ class RedshiftRolePolicyStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        # The code that defines your stack goes here
-
-        # example resource
-        # queue = sqs.Queue(
-        #     self, "CdpCdkPythonQueue",
-        #     visibility_timeout=Duration.seconds(300),
-        # )
-
-        # bucket = s3.Bucket(self, "MyFirstBucketTest", versioned=True)
-
         # Load parameters from a JSON file
         
         dirname = os.path.dirname(os.path.abspath(__file__))
@@ -88,6 +78,8 @@ class RedshiftRolePolicyStack(Stack):
         subnet_ids = parameter_loader.get_parameter("SubnetId")
         secret_name = parameter_loader.get_parameter("SecretName")
 
+        
+
         # Create Redshift Serverless Namespace
         namespace = redshiftserverless.CfnNamespace(
             self, "RedshiftNamespace",
@@ -97,26 +89,24 @@ class RedshiftRolePolicyStack(Stack):
             iam_roles=[redshift_role.role_arn]
         )
 
-        redshift_sg = ec2.SecurityGroup(
-            self, "RedshiftSG",
-            vpc=ec2.Vpc.from_lookup(self, "MyVPC", vpc_id=vpc_id),
-            description="Allow Redshift Serverless traffic"
+        redshift_sg = ec2.CfnSecurityGroup(self, "MyCfnSecurityGroup",
+            group_description="Allow Redshift",
+            vpc_id=vpc_id,
+            security_group_ingress=[{
+                "ipProtocol": "tcp",
+                "fromPort": 5439,
+                "toPort": 5439,
+                "cidrIp": "0.0.0.0/0"
+            }],
+            security_group_egress=[{
+                "ipProtocol": "tcp",
+                "fromPort": 5439,
+                "toPort": 5439,
+                "cidrIp": "0.0.0.0/0"
+            }]
         )
+        
 
-        # 🚪 Allow inbound traffic on Redshift's default port (5439)
-        redshift_sg.add_ingress_rule(
-            ec2.Peer.any_ipv4(),  # Change this to restrict access
-            ec2.Port.tcp(5439),
-            "Allow Redshift inbound traffic",
-            from_port=5439
-        )
-
-        redshift_sg.add_egress_rule(
-            ec2.Peer.any_ipv4(),  # Change this to restrict access
-            ec2.Port.tcp(5439),
-            "Allow Redshift inbound traffic",
-            from_port=5439
-        )
 
         # Create Redshift Serverless Workgroup
         workgroup = redshiftserverless.CfnWorkgroup(
