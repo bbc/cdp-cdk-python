@@ -84,6 +84,7 @@ class RedshiftRolePolicyStack(Stack):
 
         parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/cdp-serverless.json')
         vpc_id = parameter_loader.get_parameter("VpcId")
+        print("vpc_id:",vpc_id)
         subnet_ids = parameter_loader.get_parameter("SubnetId")
         secret_name = parameter_loader.get_parameter("SecretName")
 
@@ -98,7 +99,7 @@ class RedshiftRolePolicyStack(Stack):
 
         redshift_sg = ec2.SecurityGroup(
             self, "RedshiftSG",
-            vpc=vpc_id.value_as_string,
+            vpc=vpc_id,
             description="Allow Redshift Serverless traffic"
         )
 
