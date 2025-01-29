@@ -74,6 +74,8 @@ class RedshiftRolePolicyStack(Stack):
 
         parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/cdp-serverless.json')
         vpc_id = parameter_loader.get_parameter("VpcId")
+        namespace_name = parameter_loader.get_parameter("NamespaceName")
+        workgroup_name = parameter_loader.get_parameter("WorkgroupName")
         print("vpc_id:",vpc_id)
         subnet_ids = parameter_loader.get_parameter("SubnetId")
         secret_name = parameter_loader.get_parameter("SecretName")
@@ -83,7 +85,7 @@ class RedshiftRolePolicyStack(Stack):
         # Create Redshift Serverless Namespace
         namespace = redshiftserverless.CfnNamespace(
             self, "RedshiftNamespace",
-            namespace_name="my-redshift-namespace",
+            namespace_name=namespace_name,
             admin_username="admin",
             admin_user_password="YourSecurePassword123!",  # Use Secrets Manager for production
             iam_roles=[redshift_role.role_arn]
@@ -112,7 +114,7 @@ class RedshiftRolePolicyStack(Stack):
         workgroup = redshiftserverless.CfnWorkgroup(
             self, "RedshiftWorkgroup",
             workgroup_name="my-redshift-workgroup",
-            namespace_name=namespace.attr_namespace.to_string,
+            namespace_name=namespace_name,
             base_capacity=32,  # Base capacity in Redshift Processing Units (RPUs)
             publicly_accessible=False,
             subnet_ids=["subnet-03cbf98aa73d606dd", "subnet-0c2f248e008785559", "subnet-0c30c2b421ce0f84a"],  
