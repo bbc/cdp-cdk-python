@@ -7,13 +7,10 @@ from aws_cdk import (
     aws_lambda as _lambda,
     aws_redshift as redshift,
     aws_redshiftserverless as redshiftserverless
-    
 )
+
 import aws_cdk as core
-
-import boto3
 from constructs import Construct
-
 import os 
 import json
 from aws_cdk.cloudformation_include import CfnInclude
@@ -107,11 +104,14 @@ class RedshiftRolePolicyStack(Stack):
         
         
     
-        
-        # core.CfnOutput(
-        #     self, 
-        #     "WorkgroupEndpoint", 
-        #     value=workgroup.attr_endpoint_address)
+        core.CfnOutput(
+            self, 
+            "NamespaceArn", 
+            value=namespace.attr_namespace_namespace_arn)
+        core.CfnOutput(
+            self, 
+            "WorkgroupEndpoint", 
+            value=workgroup.attr_workgroup_endpoint_address)
         core.CfnOutput(
             self, 
             "RoleArn1", 
