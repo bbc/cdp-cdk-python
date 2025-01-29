@@ -80,8 +80,8 @@ class RedshiftRolePolicyStack(Stack):
         base_capacity = core.CfnParameter(self, "BaseRPU", type="Number", default=parameter_loader.get_parameter("BaseRPU"))
         publicly_accessible = core.CfnParameter(self, "PubliclyAccessible", type="Boolean", default=parameter_loader.get_parameter("PubliclyAccessible"))
         enhanced_vpc_routing = core.CfnParameter(self, "EnhancedVpcRouting", type="Boolean", default=parameter_loader.get_parameter("EnhancedVpcRouting"))
-        print("vpc_id:",vpc_id)
-        subnet_ids = parameter_loader.get_parameter("SubnetId")
+        subnet_ids = core.CfnParameter(self, "SubnetId", type="CommaDelimitedList", default=parameter_loader.get_parameter("SubnetId"))
+        print("subnet_ids:",vpc_id)
         secret_name = parameter_loader.get_parameter("SecretName")
 
         
