@@ -82,7 +82,7 @@ class RedshiftRolePolicyStack(Stack):
             )
         )
 
-        parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/cdp-pii-datashare.json')
+        parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/cdp-serverless.json')
         vpc_id = parameter_loader.get_parameter("VpcId")
         subnet_ids = parameter_loader.get_parameter("SubnetId")
         secret_name = parameter_loader.get_parameter("SecretName")
