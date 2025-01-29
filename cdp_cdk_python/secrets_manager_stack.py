@@ -1,4 +1,4 @@
-from aws_cdk import core as cdk
+import aws_cdk as core
 import aws_cdk.aws_secretsmanager as secretsmanager
 
 class SecretsManagerStack(cdk.Stack):
@@ -17,7 +17,7 @@ class SecretsManagerStack(cdk.Stack):
         )
 
         # 🔹 Output the Secret ARN (to be used in another stack)
-        cdk.CfnOutput(self, "SecretARN",
+        core.CfnOutput(self, "SecretARN",
             value=secret.secret_arn,
             description="The ARN of the stored secret",
             export_name="CDPRedshiftServerlessSecretsNameARN"  # ✅ Allows import in another stack
