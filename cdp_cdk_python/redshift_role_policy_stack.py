@@ -112,7 +112,7 @@ class RedshiftRolePolicyStack(Stack):
         workgroup = redshiftserverless.CfnWorkgroup(
             self, "RedshiftWorkgroup",
             workgroup_name="my-redshift-workgroup",
-            namespace_name=namespace.namespace_name,
+            namespace_name=namespace.attr_namespace,
             base_capacity=32,  # Base capacity in Redshift Processing Units (RPUs)
             publicly_accessible=False,
             subnet_ids=["subnet-03cbf98aa73d606dd", "subnet-0c2f248e008785559", "subnet-0c30c2b421ce0f84a"],  
