@@ -121,8 +121,8 @@ class RedshiftRolePolicyStack(Stack):
             security_group_ids=[redshift_sg.attr_group_id]  
         )
 
-        
-        
+        workgroup.add_dependency(namespace)
+        workgroup.add_dependency(redshift_sg)
         
     
         core.CfnOutput(
