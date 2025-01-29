@@ -5,10 +5,13 @@ from aws_cdk import (
     aws_s3 as s3,
     aws_iam as iam,
     aws_lambda as _lambda,
-    # aws_redshiftserverless as redshiftserverless,
+    aws_redshift as redshift,
+    aws_redshiftserverless as redshiftserverless
     
 )
 import aws_cdk as core
+
+import boto3
 from constructs import Construct
 
 import os 
@@ -80,25 +83,25 @@ class RedshiftRolePolicyStack(Stack):
             )
         )
 
-        # # Create Redshift Serverless Namespace
-        # namespace = redshiftserverless.CfnNamespace(
-        #     self, "RedshiftNamespace",
-        #     namespace_name="my-redshift-namespace",
-        #     admin_username="admin",
-        #     admin_user_password="YourSecurePassword123!",  # Use Secrets Manager for production
-        #     iam_roles=[redshift_role.role_arn]
-        # )
+        # Create Redshift Serverless Namespace
+        namespace = redshiftserverless.CfnNamespace(
+            self, "RedshiftNamespace",
+            namespace_name="my-redshift-namespace",
+            admin_username="admin",
+            admin_user_password="YourSecurePassword123!",  # Use Secrets Manager for production
+            iam_roles=[redshift_role.role_arn]
+        )
 
-        # # Create Redshift Serverless Workgroup
-        # workgroup = redshiftserverless.CfnWorkgroup(
-        #     self, "RedshiftWorkgroup",
-        #     workgroup_name="my-redshift-workgroup",
-        #     namespace_name=namespace.namespace_name,
-        #     base_capacity=32,  # Base capacity in Redshift Processing Units (RPUs)
-        #     publicly_accessible=True,
-        #     subnet_ids=["subnet-xxxxxxx", "subnet-yyyyyyy"],  # Replace with actual subnet IDs
-        #     security_group_ids=["sg-zzzzzzzz"]  # Replace with actual security group IDs
-        # )
+        # Create Redshift Serverless Workgroup
+        workgroup = redshiftserverless.CfnWorkgroup(
+            self, "RedshiftWorkgroup",
+            workgroup_name="my-redshift-workgroup",
+            namespace_name=namespace.namespace_name,
+            base_capacity=32,  # Base capacity in Redshift Processing Units (RPUs)
+            publicly_accessible=True,
+            subnet_ids=["subnet-xxxxxxx", "subnet-yyyyyyy"],  # Replace with actual subnet IDs
+            security_group_ids=["sg-zzzzzzzz"]  # Replace with actual security group IDs
+        )
 
         
         
