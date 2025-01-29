@@ -78,8 +78,10 @@ class RedshiftRolePolicyStack(Stack):
         workgroup_name = parameter_loader.get_parameter("WorkgroupName")
         db_name = parameter_loader.get_parameter("DatabaseName")
         base_capacity = core.CfnParameter(self, "BaseRPU", type="Number", default=parameter_loader.get_parameter("BaseRPU"))
-        publicly_accessible = core.CfnParameter(self, "PubliclyAccessible", type="Boolean", default=parameter_loader.get_parameter("PubliclyAccessible"))
-        enhanced_vpc_routing = core.CfnParameter(self, "EnhancedVpcRouting", type="Boolean", default=parameter_loader.get_parameter("EnhancedVpcRouting"))
+        publicly_accessible = parameter_loader.get_parameter("PubliclyAccessible")
+        is_publicly_accessible = publicly_accessible.value_as_string.lower() == "true"
+        enhanced_vpc_routing = parameter_loader.get_parameter("EnhancedVpcRouting")
+        is_enhanced_vpc_routing = enhanced_vpc_routing.value_as_string.lower() == "true"
         subnet_ids = core.CfnParameter(self, "SubnetId", type="CommaDelimitedList", default=parameter_loader.get_parameter("SubnetId"))
         print("subnet_ids:",subnet_ids)
         secret_name = parameter_loader.get_parameter("SecretName")
@@ -121,8 +123,8 @@ class RedshiftRolePolicyStack(Stack):
             workgroup_name=workgroup_name,
             namespace_name=namespace_name,
             base_capacity=base_capacity.value_as_number,  # Base capacity in Redshift Processing Units (RPUs)
-            publicly_accessible=publicly_accessible,
-            enhanced_vpc_routing=enhanced_vpc_routing,
+            publicly_accessible=is_publicly_accessible,
+            enhanced_vpc_routing=is_enhanced_vpc_routing,
             subnet_ids=subnet_ids.value_as_list, #["subnet-03cbf98aa73d606dd", "subnet-0c2f248e008785559", "subnet-0c30c2b421ce0f84a"],  
             security_group_ids=[redshift_sg.attr_group_id]  
         )
