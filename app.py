@@ -9,8 +9,18 @@ from cdp_cdk_python.lambda_role_policy_stack import LambdaRolePolicyStack
 from cdp_cdk_python.redshift_role_policy_stack import RedshiftRolePolicyStack
 
 app = cdk.App()
-LambdaRolePolicyStack(app, "LambdaRolePolicyStack")
-RedshiftRolePolicyStack(app, "RedshiftRolePolicyStack")
+LambdaRolePolicyStack(app, "LambdaRolePolicyStack", 
+                      env=cdk.Environment(
+                        account=os.getenv("CDK_DEFAULT_ACCOUNT"),  # Uses the default AWS account
+                        region=os.getenv("CDK_DEFAULT_REGION")  # Uses the default AWS region
+                        )
+                    )
+RedshiftRolePolicyStack(app, "RedshiftRolePolicyStack", 
+                      env=cdk.Environment(
+                        account=os.getenv("CDK_DEFAULT_ACCOUNT"),  # Uses the default AWS account
+                        region=os.getenv("CDK_DEFAULT_REGION")  # Uses the default AWS region
+                        )
+                    )
 
     # If you don't specify 'env', this stack will be environment-agnostic.
     # Account/Region-dependent features and context lookups will not work,
