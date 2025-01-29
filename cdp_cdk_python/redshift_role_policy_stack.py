@@ -113,7 +113,7 @@ class RedshiftRolePolicyStack(Stack):
         # Create Redshift Serverless Workgroup
         workgroup = redshiftserverless.CfnWorkgroup(
             self, "RedshiftWorkgroup",
-            workgroup_name="my-redshift-workgroup",
+            workgroup_name=workgroup_name,
             namespace_name=namespace_name,
             base_capacity=32,  # Base capacity in Redshift Processing Units (RPUs)
             publicly_accessible=False,
