@@ -122,7 +122,7 @@ class RedshiftRolePolicyStack(Stack):
             namespace_name=namespace_name,
             base_capacity=base_capacity,  # Base capacity in Redshift Processing Units (RPUs)
             publicly_accessible=publicly_accessible,
-            enhanced_vpc_routing=enhanced_vpc_routing
+            enhanced_vpc_routing=enhanced_vpc_routing,
             subnet_ids=["subnet-03cbf98aa73d606dd", "subnet-0c2f248e008785559", "subnet-0c30c2b421ce0f84a"],  
             security_group_ids=[redshift_sg.attr_group_id]  
         )
