@@ -7,7 +7,7 @@ from aws_cdk import (
 
 class SecretsManagerStack(Stack):
 
-    def __init__(self, scope: cdk.Construct, id: str, **kwargs):
+    def __init__(self, scope: core.Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)
 
         # 🔹 Create a secret in Secrets Manager
