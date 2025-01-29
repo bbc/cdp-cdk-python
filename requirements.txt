@@ -1,9 +1,5 @@
 attrs
 aws-cdk-lib
 # aws-cdk.cloud-assembly-schema==2.23.0
-boto3
-botocore
 aws-cdk.aws-redshiftserverless
-constructs
-
 
