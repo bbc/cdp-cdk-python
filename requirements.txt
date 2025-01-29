@@ -1,5 +1,2 @@
-attrs
-aws-cdk-lib
-# aws-cdk.cloud-assembly-schema==2.23.0
-aws-cdk.aws-redshiftserverless
-
+aws-cdk-lib>=2.176.0,<3.0.0
+constructs>=10.4.2,<11.0.0
