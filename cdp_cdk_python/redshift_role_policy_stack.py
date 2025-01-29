@@ -116,7 +116,7 @@ class RedshiftRolePolicyStack(Stack):
             base_capacity=32,  # Base capacity in Redshift Processing Units (RPUs)
             publicly_accessible=False,
             subnet_ids=["subnet-03cbf98aa73d606dd", "subnet-0c2f248e008785559", "subnet-0c30c2b421ce0f84a"],  
-            security_group_ids=[redshift_sg.security_group_id]  
+            security_group_ids=[redshift_sg.attr_group_id]  
         )
 
         
