@@ -4,10 +4,11 @@ from aws_cdk import (
     Stack,
     aws_secretsmanager as secretsmanager
 )
+from constructs import Construct
 
 class SecretsManagerStack(Stack):
 
-    def __init__(self, scope: core.Construct, id: str, **kwargs):
+    def __init__(self, scope: Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)
 
         # 🔹 Create a secret in Secrets Manager
