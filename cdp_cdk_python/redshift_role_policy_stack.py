@@ -99,7 +99,7 @@ class RedshiftRolePolicyStack(Stack):
 
         redshift_sg = ec2.SecurityGroup(
             self, "RedshiftSG",
-            vpc=vpc_id,
+            vpc=ec2.Vpc.from_lookup(self, "MyVPC", vpc_id=vpc_id),
             description="Allow Redshift Serverless traffic"
         )
 
