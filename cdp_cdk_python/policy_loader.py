@@ -67,7 +67,7 @@ class PolicyLoader:
                     raise KeyError(f"Reference '{ref_value}' not found in replacements.")
             elif "Fn::Sub" in obj:
                 ref_value = obj["Fn::Sub"]
-                if ref_value in self.replacements:
+                if ref_value not in self.replacements:
                     return core.Fn.sub(ref_value, self.replacements)
                 else:
                     raise KeyError(f"Reference '{ref_value}' not found in replacements.")
