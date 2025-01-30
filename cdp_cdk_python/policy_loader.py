@@ -17,6 +17,7 @@ class PolicyLoader:
         policy_data = policy_json
         statements = []
         for statement in policy_data["Statement"]:
+            print("Resource", statement["Resource"])
             resource = core.Fn.sub(statement["Resource"], replacements)
             policy_statement = iam.PolicyStatement(
                 effect=iam.Effect.ALLOW if statement["Effect"] == "Allow" else iam.Effect.DENY,
