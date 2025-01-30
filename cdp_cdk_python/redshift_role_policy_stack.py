@@ -89,10 +89,10 @@ class RedshiftRolePolicyStack(Stack):
         print("subnet_ids:",subnet_ids)
         
         secret_arn = secrets_stack.secret.secret_arn
+        print(secret_arn)
         secret = secretsmanager.Secret.from_secret_complete_arn(self, "ImportedSecret", secret_arn)
         admin_password = core.SecretValue(secret.secret_value_from_json("password"))
         print(admin_password)
-        print(admin_password.unsafe_unwrap)
         core.CfnOutput(self, "RetrievedSecretARN",
             value=secret.secret_arn,
             description="The ARN of the imported secret"
@@ -103,7 +103,7 @@ class RedshiftRolePolicyStack(Stack):
             self, "RedshiftNamespace",
             namespace_name=namespace_name,
             admin_username="admin",
-            admin_user_password=admin_password.unsafe_plain_text,
+            admin_user_password=admin_password.to_string,
             db_name=db_name,
             iam_roles=[redshift_role.role_arn]
         )
