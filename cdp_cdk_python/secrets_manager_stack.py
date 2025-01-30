@@ -5,6 +5,7 @@ from aws_cdk import (
     aws_secretsmanager as secretsmanager
 )
 from constructs import Construct
+from .cfn_param_loader import ParameterLoader
 
 class SecretsManagerStack(Stack):
 
@@ -12,8 +13,10 @@ class SecretsManagerStack(Stack):
         super().__init__(scope, id, **kwargs)
 
         # 🔹 Create a secret in Secrets Manager
-        secret = secretsmanager.Secret(self, "MySecret",
-            secret_name="CDPRedshiftServerlessSecretsName",
+        parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/cdp-serverless.json')
+        secret_name = parameter_loader.get_parameter("SecretName")
+        secret = secretsmanager.Secret(self, secret_name,
+            secret_name=secret_name,
             generate_secret_string=secretsmanager.SecretStringGenerator(
                 secret_string_template='{"username": "admin"}',
                 generate_string_key="password",
@@ -25,5 +28,5 @@ class SecretsManagerStack(Stack):
         core.CfnOutput(self, "SecretARN",
             value=secret.secret_arn,
             description="The ARN of the stored secret",
-            export_name="CDPRedshiftServerlessSecretsNameARN"  # ✅ Allows import in another stack
+            export_name="RedshiftAdminSecretARN"  # ✅ Allows import in another stack
         )

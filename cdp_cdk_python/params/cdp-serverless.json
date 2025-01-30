@@ -14,6 +14,6 @@
     "IAMRole": "arn:aws:iam::977228593394:role/int-cdp-RedshiftPIIRole",
     "LogExportsList": "userlog,connectionlog,useractivitylog",
     "EnhancedVpcRouting": "False",
-    "SecretName":"CDPRedshiftServerlessSecretsName"
+    "SecretName":"RedshiftAdminSecret"
   }
 }

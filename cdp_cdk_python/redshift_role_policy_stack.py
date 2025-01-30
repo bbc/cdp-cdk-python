@@ -88,8 +88,7 @@ class RedshiftRolePolicyStack(Stack):
         subnet_ids = core.CfnParameter(self, "SubnetId", type="CommaDelimitedList", default=parameter_loader.get_parameter("SubnetId"))
         print("subnet_ids:",subnet_ids)
         
-        secret_name = parameter_loader.get_parameter("SecretName")
-        secret_arn = core.Fn.import_value(secret_name+"ARN")
+        secret_arn = secrets_stack.secret.secret_arn
 
         # 🔹 Retrieve the secret dynamically
         secret = secretsmanager.Secret.from_secret_complete_arn(self, "ImportedSecret", secret_arn)
@@ -108,7 +107,7 @@ class RedshiftRolePolicyStack(Stack):
             self, "RedshiftNamespace",
             namespace_name=namespace_name,
             admin_username="admin",
-            admin_user_password=secret.secret_name,  # "YourSecurePassword123!"
+            admin_user_password=f"{{resolve:secretsmanager:{secret_arn}:SecretString:password}}",
             db_name=db_name,
             iam_roles=[redshift_role.role_arn]
         )
