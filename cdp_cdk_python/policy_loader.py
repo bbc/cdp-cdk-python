@@ -14,7 +14,7 @@ class PolicyLoader:
     def load_policy(self, file_name: str, replacements: dict) -> iam.PolicyDocument:
         policy_json = self._do_replace(file_name, replacements) 
         print(str(policy_json).replace("'","\""))
-        
+        policy_json = json.loads(str(policy_json).replace("'","\""))
         # policy_json = re.sub(
         #         r"\{'Fn::Sub':",
         #         '{"Fn::Sub":',
