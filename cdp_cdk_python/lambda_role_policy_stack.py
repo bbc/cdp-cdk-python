@@ -70,7 +70,7 @@ class LambdaRolePolicyStack(Stack):
                         "redshift-data:BatchExecuteStatement",
                         "redshift-data:ExecuteStatement"
                     ],
-                    "Resource": resource_arn  # ✅ Pass the processed value
+                    "Resource": resource_arn  
                 }
             ]
         })
