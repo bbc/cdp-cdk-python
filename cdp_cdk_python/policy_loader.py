@@ -66,11 +66,13 @@ class PolicyLoader:
                 else:
                     raise KeyError(f"Reference '{ref_value}' not found in replacements.")
             elif "Fn::Sub" in obj:
-                ref_value = obj["Fn::Sub"]
-                if ref_value not in self.replacements:
-                    return core.Fn.sub(ref_value, self.replacements)
+                template_string = obj["Fn::Sub"]
+                variable_names = re.findall(r"\${([A-Za-z0-9_]+)}", template_string)
+                missing_vars = [var for var in variable_names if var not in self.replacements]
+                if not missing_vars:
+                    return core.Fn.sub(template_string, self.replacements)
                 else:
-                    raise KeyError(f"Reference '{ref_value}' not found in replacements.")
+                    raise KeyError(f"missing vars '{missing_vars}' not found in replacements.")
             else:
                 return {k: self._replace_refs(v) for k, v in obj.items()}
         elif isinstance(obj, list):
