@@ -14,19 +14,20 @@ class PolicyLoader:
     def load_policy(self, file_name: str, replacements: dict) -> iam.PolicyDocument:
         policy_json = self._do_replace(file_name, replacements) 
         print(str(policy_json))
-        policy_data = policy_json
-        statements = []
-        for statement in policy_data["Statement"]:
-            print("Resource", statement["Resource"])
-            resource = core.Fn.sub(statement["Resource"], replacements)
-            policy_statement = iam.PolicyStatement(
-                effect=iam.Effect.ALLOW if statement["Effect"] == "Allow" else iam.Effect.DENY,
-                actions=[statement["Action"]] if isinstance(statement["Action"], str) else statement["Action"],
-                resources=[resource] if isinstance(resource, str) else resource
-            )
-            statements.append(policy_statement)
+        # policy_data = policy_json
+        # statements = []
+        # for statement in policy_data["Statement"]:
+        #     print("Resource", statement["Resource"])
+        #     resource = core.Fn.sub(statement["Resource"], replacements)
+        #     policy_statement = iam.PolicyStatement(
+        #         effect=iam.Effect.ALLOW if statement["Effect"] == "Allow" else iam.Effect.DENY,
+        #         actions=[statement["Action"]] if isinstance(statement["Action"], str) else statement["Action"],
+        #         resources=[resource] if isinstance(resource, str) else resource
+        #     )
+        #     statements.append(policy_statement)
         try:
-            policy_doc = iam.PolicyDocument(statements=statements)
+            # policy_doc = iam.PolicyDocument(statements=statements)
+            policy_doc = iam.PolicyDocument.from_json(policy_json)
         except Exception as e:
             print(f"An error occurred: {str(e)}") 
         return policy_doc
@@ -61,6 +62,12 @@ class PolicyLoader:
         if isinstance(obj, dict):
             if "Ref" in obj:
                 ref_value = obj["Ref"]
+                if ref_value in self.replacements:
+                    return self.replacements[ref_value]
+                else:
+                    raise KeyError(f"Reference '{ref_value}' not found in replacements.")
+            elif "Fn::Sub" in obj:
+                ref_value = obj["Fn::Sub"]
                 if ref_value in self.replacements:
                     return self.replacements[ref_value]
                 else:
