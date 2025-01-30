@@ -91,7 +91,7 @@ class RedshiftRolePolicyStack(Stack):
         secret_arn = secrets_stack.secret.secret_arn
         print(secret_arn)
         secret = secretsmanager.Secret.from_secret_complete_arn(self, "ImportedSecret", secret_arn)
-        admin_password = secret.secret_value_from_json("password").unsafe_plain_text
+        admin_password = secret.secret_value_from_json("password").unsafe_unwrap()
         print(admin_password)
         core.CfnOutput(self, "RetrievedSecretARN",
             value=secret.secret_arn,
