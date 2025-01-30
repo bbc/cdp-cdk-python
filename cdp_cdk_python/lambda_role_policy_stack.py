@@ -60,7 +60,7 @@ class LambdaRolePolicyStack(Stack):
         #     replacements={"ClusterName":cluster_name, "AWS::Region":self.region, "AWS::AccountId":self.account}
         # )
         
-        resource_arn = core.Fn.sub("arn:aws:redshift:${AWS::Region}:${AWS::AccountId}:cluster:${ClusterName}", {"AWS::Region": self.region, "AWS::AccountId": self.account, "ClusterName": cluster_name})
+        resource_arn = core.Fn.sub("arn:aws:redshift:${AWS::Region}:${AWS::AccountId}:cluster:${ClusterName}", {"Region": self.region, "AccountId": self.account, "ClusterName": cluster_name})
         print("resource_arn:",resource_arn)
         execute_batch_statement_doc = iam.PolicyDocument.from_json({
             "Statement": [
