@@ -15,7 +15,7 @@ class SecretsManagerStack(Stack):
         # 🔹 Create a secret in Secrets Manager
         parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/cdp-serverless.json')
         secret_name = parameter_loader.get_parameter("SecretName")
-        secret = secretsmanager.Secret(self, secret_name,
+        self.secret = secretsmanager.Secret(self, secret_name,
             secret_name=secret_name,
             generate_secret_string=secretsmanager.SecretStringGenerator(
                 secret_string_template='{"username": "admin"}',
@@ -26,7 +26,7 @@ class SecretsManagerStack(Stack):
 
         # 🔹 Output the Secret ARN (to be used in another stack)
         core.CfnOutput(self, "SecretARN",
-            value=secret.secret_arn,
+            value=self.secret.secret_arn,
             description="The ARN of the stored secret",
             export_name="RedshiftAdminSecretARN"  # ✅ Allows import in another stack
         )
