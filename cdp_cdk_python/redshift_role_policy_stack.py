@@ -92,10 +92,8 @@ class RedshiftRolePolicyStack(Stack):
 
         # 🔹 Retrieve the secret dynamically
         secret = secretsmanager.Secret.from_secret_complete_arn(self, "ImportedSecret", secret_arn)
-        print(secret)
-        print(secret.secret_value_from_json)
-        print(secret.secret_name)
-        print(secret.secret_value)
+        admin_password = secret.secret_value_from_json("password")
+        
         # 🔹 Use the secret (example: Redshift Workgroup)
         core.CfnOutput(self, "RetrievedSecretARN",
             value=secret.secret_arn,
@@ -107,7 +105,7 @@ class RedshiftRolePolicyStack(Stack):
             self, "RedshiftNamespace",
             namespace_name=namespace_name,
             admin_username="admin",
-            admin_user_password=f"{{resolve:secretsmanager:{secret_arn}:SecretString:password}}",
+            admin_user_password=admin_password,
             db_name=db_name,
             iam_roles=[redshift_role.role_arn]
         )
