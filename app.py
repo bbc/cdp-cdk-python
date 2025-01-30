@@ -22,7 +22,7 @@ LambdaRolePolicyStack(app, "LambdaRolePolicyStack",
                         region=os.getenv("CDK_DEFAULT_REGION")  # Uses the default AWS region
                       )
                     )
-RedshiftRolePolicyStack(app, "RedshiftRolePolicyStack", secrets_stack=secrets_stack
+RedshiftRolePolicyStack(app, "RedshiftRolePolicyStack", secrets_stack=secrets_stack,
                       env=cdk.Environment(
                         account=os.getenv("CDK_DEFAULT_ACCOUNT"),  # Uses the default AWS account
                         region=os.getenv("CDK_DEFAULT_REGION")  # Uses the default AWS region
