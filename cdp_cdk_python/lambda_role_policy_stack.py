@@ -57,7 +57,7 @@ class LambdaRolePolicyStack(Stack):
 
         execute_batch_statement_doc = policy_loader.load_policy(
             file_name="execute_batch_statement.json",
-            replacements={"ClusterName":cluster_name, "AWS::Region":self.region, "AWS::AccountId":self.account}
+            replacements={"ClusterName":cluster_name, "Region":self.region, "AccountId":self.account}
         )
         
         # resource_arn = core.Fn.sub("arn:aws:redshift:${AWS::Region}:${AWS::AccountId}:cluster:${ClusterName}", {"Region": self.region, "AccountId": self.account, "ClusterName": cluster_name})
