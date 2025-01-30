@@ -55,12 +55,10 @@ class LambdaRolePolicyStack(Stack):
             replacements={"SecretArn":secret_arn}#"arn:aws:secretsmanager:eu-west-1:977228593394:secret:redshift-int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr-scvpiiadmin-VeQ6oT"
         )
 
-        account_id = os.getenv('CDK_DEFAULT_ACCOUNT')
-        region = os.getenv('CDK_DEFAULT_REGION')
-        # execute_batch_statement_doc = policy_loader.load_policy(
-        #     file_name="execute_batch_statement.json",
-        #     replacements={"ClusterName":cluster_name, "AWS::Region":region, "AWS::AccountId":account_id}
-        # )
+        execute_batch_statement_doc = policy_loader.load_policy(
+            file_name="execute_batch_statement.json",
+            replacements={"ClusterName":cluster_name, "AWS::Region":self.region, "AWS::AccountId":self.account}
+        )
         # execute_batch_statement_doc = iam.PolicyDocument.from_json(
         #     {
         #         "Version": "2012-10-17",
@@ -81,11 +79,7 @@ class LambdaRolePolicyStack(Stack):
         # )
         
 
-    # Uncomment the next line if you know exactly what Account and Region you
-    # want to deploy the stack to. */
-
-    #env=cdk.Environment(account='123456789012', region='us-east-1'),
-        
+    
         iam_role.attach_inline_policy(
             iam.Policy(
                 self, 
@@ -102,13 +96,13 @@ class LambdaRolePolicyStack(Stack):
             )
         )
 
-        # iam_role.attach_inline_policy(
-        #     iam.Policy(
-        #         self, 
-        #         "ExecuteBatchStatementPolicy",
-        #         document=execute_batch_statement_doc
-        #     )
-        # )
+        iam_role.attach_inline_policy(
+            iam.Policy(
+                self, 
+                "ExecuteBatchStatementPolicy",
+                document=execute_batch_statement_doc
+            )
+        )
 
         iam_role.attach_inline_policy(
             iam.Policy(
