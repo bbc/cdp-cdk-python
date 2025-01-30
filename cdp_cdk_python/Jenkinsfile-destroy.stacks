@@ -14,10 +14,10 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Check env') {
+        stage('Activate env, install dependencies and destroy') {
             steps {
-                //  Use Python3, activate venv, install Python dependencies, synthesize the CDK app and deploy the CDK stack
-                sh 'virtualenv -p /usr/bin/python3 venv && source venv/bin/activate && pip install -r requirements.txt && cdk destroy --all --force'
+                //  Use Python3.12, activate new venv, install Python dependencies, synthesize the CDK app 
+                sh 'python3.12 -m venv new-venv && source new-venv/bin/activate && python3 --version && pip install -r requirements.txt && python3 --version  && cdk destroy --all --force'
             }
         }
     }
