@@ -18,9 +18,11 @@ import json
 from aws_cdk.cloudformation_include import CfnInclude
 from .cfn_param_loader import ParameterLoader
 
+from cdp_cdk_python.secrets_manager_stack import SecretsManagerStack
+
 class RedshiftRolePolicyStack(Stack):
 
-    def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, construct_id: str, secrets_stack: SecretsManagerStack, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
         # Load parameters from a JSON file

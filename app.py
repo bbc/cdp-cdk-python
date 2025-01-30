@@ -10,7 +10,7 @@ from cdp_cdk_python.redshift_role_policy_stack import RedshiftRolePolicyStack
 from cdp_cdk_python.secrets_manager_stack import SecretsManagerStack
 app = cdk.App()
 
-SecretsManagerStack(app, "SecretsManagerStack", 
+secrets_stack = SecretsManagerStack(app, "SecretsManagerStack", 
                       env=cdk.Environment(
                         account=os.getenv("CDK_DEFAULT_ACCOUNT"),  # Uses the default AWS account
                         region=os.getenv("CDK_DEFAULT_REGION")  # Uses the default AWS region
@@ -22,7 +22,7 @@ LambdaRolePolicyStack(app, "LambdaRolePolicyStack",
                         region=os.getenv("CDK_DEFAULT_REGION")  # Uses the default AWS region
                       )
                     )
-RedshiftRolePolicyStack(app, "RedshiftRolePolicyStack", 
+RedshiftRolePolicyStack(app, "RedshiftRolePolicyStack", secrets_stack=secrets_stack
                       env=cdk.Environment(
                         account=os.getenv("CDK_DEFAULT_ACCOUNT"),  # Uses the default AWS account
                         region=os.getenv("CDK_DEFAULT_REGION")  # Uses the default AWS region
