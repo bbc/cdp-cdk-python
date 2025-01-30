@@ -93,7 +93,10 @@ class RedshiftRolePolicyStack(Stack):
 
         # 🔹 Retrieve the secret dynamically
         secret = secretsmanager.Secret.from_secret_complete_arn(self, "ImportedSecret", secret_arn)
-
+        print(secret)
+        print(secret.secret_value_from_json)
+        print(secret.secret_name)
+        print(secret.secret_value)
         # 🔹 Use the secret (example: Redshift Workgroup)
         core.CfnOutput(self, "RetrievedSecretARN",
             value=secret.secret_arn,
