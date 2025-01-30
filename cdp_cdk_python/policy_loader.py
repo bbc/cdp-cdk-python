@@ -14,7 +14,7 @@ class PolicyLoader:
     def load_policy(self, file_name: str, replacements: dict) -> iam.PolicyDocument:
         policy_json = self._do_replace(file_name, replacements) 
         print(str(policy_json))
-        policy_data = json.loads(policy_json)
+        policy_data = policy_json
         statements = []
         for statement in policy_data["Statement"]:
             resource = statement["Resource"]
