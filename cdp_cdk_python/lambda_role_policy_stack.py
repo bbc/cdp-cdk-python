@@ -55,25 +55,25 @@ class LambdaRolePolicyStack(Stack):
             replacements={"SecretArn":secret_arn}#"arn:aws:secretsmanager:eu-west-1:977228593394:secret:redshift-int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr-scvpiiadmin-VeQ6oT"
         )
 
-        # execute_batch_statement_doc = policy_loader.load_policy(
-        #     file_name="execute_batch_statement.json",
-        #     replacements={"ClusterName":cluster_name, "AWS::Region":self.region, "AWS::AccountId":self.account}
-        # )
+        execute_batch_statement_doc = policy_loader.load_policy(
+            file_name="execute_batch_statement.json",
+            replacements={"ClusterName":cluster_name, "AWS::Region":self.region, "AWS::AccountId":self.account}
+        )
         
-        resource_arn = core.Fn.sub("arn:aws:redshift:${AWS::Region}:${AWS::AccountId}:cluster:${ClusterName}", {"Region": self.region, "AccountId": self.account, "ClusterName": cluster_name})
-        print("resource_arn:",resource_arn)
-        execute_batch_statement_doc = iam.PolicyDocument.from_json({
-            "Statement": [
-                {
-                    "Effect": "Allow",
-                    "Action": [
-                        "redshift-data:BatchExecuteStatement",
-                        "redshift-data:ExecuteStatement"
-                    ],
-                    "Resource": resource_arn  
-                }
-            ]
-        })
+        # resource_arn = core.Fn.sub("arn:aws:redshift:${AWS::Region}:${AWS::AccountId}:cluster:${ClusterName}", {"Region": self.region, "AccountId": self.account, "ClusterName": cluster_name})
+        # print("resource_arn:",resource_arn)
+        # execute_batch_statement_doc = iam.PolicyDocument.from_json({
+        #     "Statement": [
+        #         {
+        #             "Effect": "Allow",
+        #             "Action": [
+        #                 "redshift-data:BatchExecuteStatement",
+        #                 "redshift-data:ExecuteStatement"
+        #             ],
+        #             "Resource": resource_arn  
+        #         }
+        #     ]
+        # })
         
 
     
