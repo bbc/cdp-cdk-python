@@ -25,6 +25,7 @@ class ScvConsumerDatashareStack(Stack):
         parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/scv-consumer-datashare.json')
         datashare_name = parameter_loader.get_parameter("DatashareName")
         workgroup_name = parameter_loader.get_parameter("WorkgroupName")
+        workgroup_arn = parameter_loader.get_parameter("WorkGroupArn")
         database_name_connection = parameter_loader.get_parameter("DatabaseNameConnection")
         database_name_from_datashare = parameter_loader.get_parameter("DatabaseNameFromDatashare")
         secret_arn = parameter_loader.get_parameter("SecretArn")
@@ -63,7 +64,7 @@ class ScvConsumerDatashareStack(Stack):
 
         execute_batch_statement_doc = policy_loader.load_policy(
             file_name="execute_batch_statement_workgroup.json",
-            replacements={"WorkgroupArn":secret_arn}
+            replacements={"WorkgroupArn":workgroup_arn}
         )
         
         # resource_arn = core.Fn.sub("arn:aws:redshift:${AWS::Region}:${AWS::AccountId}:cluster:${ClusterName}", {"Region": self.region, "AccountId": self.account, "ClusterName": cluster_name})
@@ -134,7 +135,7 @@ class ScvConsumerDatashareStack(Stack):
         post_deployment_lambda = _lambda.Function(
             self, 
             "MyFunction",
-            runtime=_lambda.Runtime.PYTHON_3_9,
+            runtime=_lambda.Runtime.PYTHON_3_12,
             handler="consumer_datashare.lambda_handler",
             environment={
                 "DATASHARE_NAME": datashare_name,

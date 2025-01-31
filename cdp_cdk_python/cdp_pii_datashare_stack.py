@@ -134,12 +134,9 @@ class CdpPiiDatashareStack(Stack):
         post_deployment_lambda = _lambda.Function(
             self, 
             "MyFunction",
-            runtime=_lambda.Runtime.PYTHON_3_9,
+            runtime=_lambda.Runtime.PYTHON_3_12,
             handler="producer_datashare.lambda_handler",
             environment={
-                # "CodeVersionString": 1.0,
-                # "REGION": core.Stack.region,
-                # "AVAILABILITY_ZONES": json.dumps(core.Stack.availability_zones),
                 "DATASHARE_NAME": datashare_name,
                 "DATABASE_NAME": database_name,
                 "SCHEMA_NAME": schema_name,
