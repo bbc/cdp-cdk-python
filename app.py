@@ -5,7 +5,7 @@ import os
 # sys.path += ['/usr/local/lib/python3.12/site-packages','/var/lib/jenkins/.local/lib/python3.12/site-packages']
 import aws_cdk as core
 
-from cdp_cdk_python.lambda_role_policy_stack import LambdaRolePolicyStack
+from cdp_cdk_python.cdp_pii_datashare_stack import CdpPiiDatashareStack
 from cdp_cdk_python.redshift_role_policy_stack import RedshiftRolePolicyStack
 from cdp_cdk_python.secrets_manager_stack import SecretsManagerStack
 app = core.App()
@@ -16,7 +16,7 @@ secrets_stack = SecretsManagerStack(app, "SecretsManagerStack",
                         region=os.getenv("CDK_DEFAULT_REGION")  # Uses the default AWS region
                       )
                     )
-LambdaRolePolicyStack(app, "LambdaRolePolicyStack", 
+CdpPiiDatashareStack(app, "CdpPiiDatashareStack", 
                       env=core.Environment(
                         account=os.getenv("CDK_DEFAULT_ACCOUNT"),  # Uses the default AWS account
                         region=os.getenv("CDK_DEFAULT_REGION")  # Uses the default AWS region
