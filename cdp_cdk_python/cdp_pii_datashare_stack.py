@@ -135,7 +135,7 @@ class CdpPiiDatashareStack(Stack):
             self, 
             "MyFunction",
             runtime=_lambda.Runtime.PYTHON_3_9,
-            handler="lambda_function.lambda_handler",
+            handler="producer_datashare.lambda_handler",
             environment={
                 # "CodeVersionString": 1.0,
                 # "REGION": core.Stack.region,
@@ -147,7 +147,7 @@ class CdpPiiDatashareStack(Stack):
                 "CONSUMER_ACCOUNT": consumer_account,
                 "TABLES_GRANT_SELECT": tables_to_grant_select
             },
-            code=_lambda.Code.from_asset("cdp_cdk_python/producer_datashare"),
+            code=_lambda.Code.from_asset("cdp_cdk_python/lambda_function"),
             timeout=core.Duration.seconds(30),
             memory_size=memory_param.value_as_number,
             role=iam_role

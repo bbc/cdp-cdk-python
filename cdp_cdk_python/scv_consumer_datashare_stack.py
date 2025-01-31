@@ -135,7 +135,7 @@ class ScvConsumerDatashareStack(Stack):
             self, 
             "MyFunction",
             runtime=_lambda.Runtime.PYTHON_3_9,
-            handler="lambda_function.lambda_handler",
+            handler="consumer_datashare.lambda_handler",
             environment={
                 "DATASHARE_NAME": datashare_name,
                 "WORKGROUP_NAME": workgroup_name,
