@@ -9,9 +9,6 @@ pipeline {
 
     parameters {
         booleanParam(name: 'PROCEED_TO_DEPLOY', defaultValue: false, description: 'Select Yes to proceed to deployment after synthesizing.')
-    }
-
-    parameters {
         choice(name: 'USECASE', choices: ['serverless ns and wg', 'producer datashare', 'consumer datashare'], description: 'Select the usecase')
     }
 
