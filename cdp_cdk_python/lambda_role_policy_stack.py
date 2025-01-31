@@ -135,17 +135,17 @@ class LambdaRolePolicyStack(Stack):
             "MyFunction",
             runtime=_lambda.Runtime.PYTHON_3_9,
             handler="lambda_function.lambda_handler",
-            environment={
-                "CodeVersionString": 1.0,
-                "REGION": core.Stack.region,
-                # "AVAILABILITY_ZONES": json.dumps(core.Stack.availability_zones),
-                "DATASHARE_NAME": datashare_name,
-                "DATABASE_NAME": database_name,
-                "SCHEMA_NAME": schema_name,
-                "SECRET_ARN": secret_arn,
-                "CONSUMER_ACCOUNT": consumer_account,
-                "TABLES_GRANT_SELECT": tables_to_grant_select
-            },
+            # environment={
+            #     "CodeVersionString": 1.0,
+            #     "REGION": core.Stack.region,
+            #     # "AVAILABILITY_ZONES": json.dumps(core.Stack.availability_zones),
+            #     "DATASHARE_NAME": datashare_name,
+            #     "DATABASE_NAME": database_name,
+            #     "SCHEMA_NAME": schema_name,
+            #     "SECRET_ARN": secret_arn,
+            #     "CONSUMER_ACCOUNT": consumer_account,
+            #     "TABLES_GRANT_SELECT": tables_to_grant_select
+            # },
             code=_lambda.Code.from_asset("cdp_cdk_python/lambda_function"),
             timeout=core.Duration.minutes(15),
             memory_size=memory_param.value_as_number,
