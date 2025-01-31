@@ -25,7 +25,7 @@ class ScvConsumerDatashareStack(Stack):
         parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/scv-consumer-datashare.json')
         datashare_name = parameter_loader.get_parameter("DatashareName")
         workgroup_name = parameter_loader.get_parameter("WorkgroupName")
-        workgroup_arn = parameter_loader.get_parameter("WorkGroupArn")
+        workgroup_arn = parameter_loader.get_parameter("WorkgroupArn")
         database_name_connection = parameter_loader.get_parameter("DatabaseNameConnection")
         database_name_from_datashare = parameter_loader.get_parameter("DatabaseNameFromDatashare")
         secret_arn = parameter_loader.get_parameter("SecretArn")
