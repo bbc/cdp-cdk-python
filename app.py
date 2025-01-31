@@ -8,6 +8,7 @@ import aws_cdk as core
 from cdp_cdk_python.cdp_pii_datashare_stack import CdpPiiDatashareStack
 from cdp_cdk_python.redshift_role_policy_stack import RedshiftRolePolicyStack
 from cdp_cdk_python.secrets_manager_stack import SecretsManagerStack
+from cdp_cdk_python.scv_consumer_datashare_stack import ScvConsumerDatashareStack
 app = core.App()
 
 secrets_stack = SecretsManagerStack(app, "SecretsManagerStack", 
@@ -17,6 +18,12 @@ secrets_stack = SecretsManagerStack(app, "SecretsManagerStack",
                       )
                     )
 CdpPiiDatashareStack(app, "CdpPiiDatashareStack", 
+                      env=core.Environment(
+                        account=os.getenv("CDK_DEFAULT_ACCOUNT"),  # Uses the default AWS account
+                        region=os.getenv("CDK_DEFAULT_REGION")  # Uses the default AWS region
+                      )
+                    )
+ScvConsumerDatashareStack(app, "ScvConsumerDatashareStack", 
                       env=core.Environment(
                         account=os.getenv("CDK_DEFAULT_ACCOUNT"),  # Uses the default AWS account
                         region=os.getenv("CDK_DEFAULT_REGION")  # Uses the default AWS region

@@ -22,7 +22,7 @@ class ScvConsumerDatashareStack(Stack):
 
         # Load parameters from the JSON file
         # parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/cdp-pii-datashare.json')
-        parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/cdp-pii-datashare.json')
+        parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/scv-consumer-datashare.json')
         datashare_name = parameter_loader.get_parameter("DatashareName")
         workgroup_name = parameter_loader.get_parameter("WorkgroupName")
         database_name_connection = parameter_loader.get_parameter("DatabaseNameConnection")
