@@ -1,0 +1,14 @@
+{
+    "aws_account_id": "977228593394",
+    "region": "eu-west-1",
+    "main_stack": false,
+    "parameters": {
+      "DatashareName": "int_cdp_pii_share",
+      "WorkgroupName": "int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr",
+      "DatabaseNameConnection": "redshiftdb",
+      "DatabaseNameFromDatashare": "del",
+      "SecretArn": "arn:aws:secretsmanager:eu-west-1:977228593394:secret:redshift-int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr-scvpiiadmin-VeQ6oT",
+      "ProducerAccount": "145059524404",
+      "ProducerNamespaceIdentifier": "id_profile"
+    }
+  }

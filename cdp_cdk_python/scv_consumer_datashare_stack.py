@@ -16,22 +16,22 @@ from .policy_loader import PolicyLoader
 from .cfn_param_loader import ParameterLoader
 from aws_cdk.custom_resources import Provider
 
-class LambdaRolePolicyStack(Stack):
+class ScvConsumerDatashareStack(Stack):
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # Load parameters from the JSON file
         # parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/cdp-pii-datashare.json')
         parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/cdp-pii-datashare.json')
-        cluster_name = parameter_loader.get_parameter("ClusterName")
         datashare_name = parameter_loader.get_parameter("DatashareName")
-        database_name = parameter_loader.get_parameter("DatabaseName")
-        schema_name = parameter_loader.get_parameter("SchemaName")
+        workgroup_name = parameter_loader.get_parameter("WorkgroupName")
+        database_name_connection = parameter_loader.get_parameter("DatabaseNameConnection")
+        database_name_from_datashare = parameter_loader.get_parameter("DatabaseNameFromDatashare")
         secret_arn = parameter_loader.get_parameter("SecretArn")
-        consumer_account = parameter_loader.get_parameter("ConsumerAccount")
-        tables_to_grant_select = parameter_loader.get_parameter("TablesToGrantSelect")
+        producer_account = parameter_loader.get_parameter("ProducerAccount")
+        producer_namespace_identifier = parameter_loader.get_parameter("ProducerNamespaceIdentifier")
         
-        print(cluster_name)
+        print(datashare_name)
         print(secret_arn)
 
         # Create an IAM Role
@@ -62,8 +62,8 @@ class LambdaRolePolicyStack(Stack):
         )
 
         execute_batch_statement_doc = policy_loader.load_policy(
-            file_name="execute_batch_statement.json",
-            replacements={"ClusterName":cluster_name, "Region":self.region, "AccountId":self.account}
+            file_name="execute_batch_statement_workgroup.json",
+            replacements={"WorkgroupArn":secret_arn}
         )
         
         # resource_arn = core.Fn.sub("arn:aws:redshift:${AWS::Region}:${AWS::AccountId}:cluster:${ClusterName}", {"Region": self.region, "AccountId": self.account, "ClusterName": cluster_name})
@@ -137,15 +137,13 @@ class LambdaRolePolicyStack(Stack):
             runtime=_lambda.Runtime.PYTHON_3_9,
             handler="lambda_function.lambda_handler",
             environment={
-                # "CodeVersionString": 1.0,
-                # "REGION": core.Stack.region,
-                # "AVAILABILITY_ZONES": json.dumps(core.Stack.availability_zones),
                 "DATASHARE_NAME": datashare_name,
-                "DATABASE_NAME": database_name,
-                "SCHEMA_NAME": schema_name,
+                "WORKGROUP_NAME": workgroup_name,
+                "DATABASE_NAME_CONNECTION": database_name_connection,
+                "DATABASE_NAME_FROM_DATASHARE": database_name_from_datashare,
                 "SECRET_ARN": secret_arn,
-                "CONSUMER_ACCOUNT": consumer_account,
-                "TABLES_GRANT_SELECT": tables_to_grant_select
+                "PRODUCER_ACCOUNT": producer_account,
+                "PRODUCER_NAMESPACE_IDENTIFIER": producer_namespace_identifier
             },
             code=_lambda.Code.from_asset("cdp_cdk_python/lambda_function"),
             timeout=core.Duration.seconds(30),
