@@ -5,7 +5,7 @@
     "parameters": {
       "DatashareName": "int_cdp_pii_share",
       "WorkgroupName": "devworkgroup",
-      "WorkGroupArn": "arn:aws:redshift-serverless:eu-west-1:145059524404:workgroup/e1baa612-891a-4254-b1f8-e4f00ee6a482",
+      "WorkgroupArn": "arn:aws:redshift-serverless:eu-west-1:145059524404:workgroup/e1baa612-891a-4254-b1f8-e4f00ee6a482",
       "DatabaseNameConnection": "redshiftdb",
       "DatabaseNameFromDatashare": "del",
       "SecretArn": "arn:aws:secretsmanager:eu-west-1:977228593394:secret:redshift-int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr-scvpiiadmin-VeQ6oT",
