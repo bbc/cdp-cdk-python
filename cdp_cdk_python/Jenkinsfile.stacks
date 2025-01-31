@@ -23,7 +23,6 @@ pipeline {
             steps {
                 script {
                     def selectedUsecase = params.USECASE
-                    def stacksToSelect = ""
                     //  Use Python3.12, activate new venv, install Python dependencies, synthesize the CDK app 
                     def initCommand = "python3.12 -m venv new-venv && source new-venv/bin/activate && python3 --version && pip install -r requirements.txt && python3 --version  && cdk synth "
                     switch (selectedUsecase) {
