@@ -136,7 +136,7 @@ class LambdaRolePolicyStack(Stack):
             runtime=_lambda.Runtime.PYTHON_3_9,
             handler="lambda_function.lambda_handler",
             environment={
-                "CodeVersionString": 1.0,
+                # "CodeVersionString": 1.0,
                 # "REGION": core.Stack.region,
                 # "AVAILABILITY_ZONES": json.dumps(core.Stack.availability_zones),
                 "DATASHARE_NAME": datashare_name,
