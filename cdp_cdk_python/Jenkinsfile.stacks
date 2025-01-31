@@ -8,7 +8,11 @@ pipeline {
     }
 
     parameters {
-        booleanParam(name: 'PROCEED_TO_DEPLOY', defaultValue: true, description: 'Select Yes to proceed to deployment after synthesizing.')
+        booleanParam(name: 'PROCEED_TO_DEPLOY', defaultValue: false, description: 'Select Yes to proceed to deployment after synthesizing.')
+    }
+
+    parameters {
+        choice(name: 'USECASE', choices: ['serverless ns and wg', 'producer datashare', 'consumer datashare'], description: 'Select the usecase')
     }
 
     stages {
@@ -19,8 +23,23 @@ pipeline {
         }
         stage('Activate env, install dependencies and synthesize') {
             steps {
+                def selectedUsecase = params.USECASE
+                def stacksToSelect = ""
+                def initCommand = "python3.12 -m venv new-venv && source new-venv/bin/activate && python3 --version && pip install -r requirements.txt && python3 --version  && cdk synth "
+                switch (selectedUsecase) {
+                    case "serverless ns and wg":
+                        stacksToSelect = ""
+                        break
+                    case "producer datashare":
+                        stacksToSelect = ""
+                        break
+                    case "consumer datashare":
+                        stacksToSelect = ""
+                        break
+                }
+                command = initCommand + stacksToSelect
                 //  Use Python3.12, activate new venv, install Python dependencies, synthesize the CDK app 
-                sh 'python3.12 -m venv new-venv && source new-venv/bin/activate && python3 --version && pip install -r requirements.txt && python3 --version  && cdk synth'
+                sh command
             }
         }
         stage('Confirm Deployment') {
