@@ -26,13 +26,13 @@ pipeline {
                     def initCommand = "python3.12 -m venv new-venv && source new-venv/bin/activate && python3 --version && pip install -r requirements.txt && python3 --version  && cdk synth "
                     switch (selectedUsecase) {
                         case "serverless ns and wg":
-                            stacksToSelect = ""
+                            stacksToSelect = "SecretsManagerStack RedshiftRolePolicyStack"
                             break
                         case "producer datashare":
-                            stacksToSelect = ""
+                            stacksToSelect = "SecretsManagerStack CdpPiiDatashareStack"
                             break
                         case "consumer datashare":
-                            stacksToSelect = ""
+                            stacksToSelect = "SecretsManagerStack ScvConsumerDatashareStack"
                             break
                     }
                     command = initCommand + stacksToSelect
