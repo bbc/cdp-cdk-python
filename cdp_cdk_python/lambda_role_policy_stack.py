@@ -23,7 +23,12 @@ class LambdaRolePolicyStack(Stack):
         # parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/cdp-pii-datashare.json')
         parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/cdp-pii-datashare.json')
         cluster_name = parameter_loader.get_parameter("ClusterName")
+        datashare_name = parameter_loader.get_parameter("DatashareName")
+        database_name = parameter_loader.get_parameter("DatabaseName")
+        schema_name = parameter_loader.get_parameter("SchemaName")
         secret_arn = parameter_loader.get_parameter("SecretArn")
+        consumer_account = parameter_loader.get_parameter("ConsumerAccount")
+        tables_to_grant_select = parameter_loader.get_parameter("TablesToGrantSelect")
         
         print(cluster_name)
         print(secret_arn)
@@ -130,11 +135,17 @@ class LambdaRolePolicyStack(Stack):
             "MyFunction",
             runtime=_lambda.Runtime.PYTHON_3_9,
             handler="lambda_function.lambda_handler",
-            # environment={
-                # "CodeVersionString": 1.0,
-                # "REGION": core.Stack.region,
+            environment={
+                "CodeVersionString": 1.0,
+                "REGION": core.Stack.region,
                 # "AVAILABILITY_ZONES": json.dumps(core.Stack.availability_zones),
-            # },
+                "DATASHARE_NAME": datashare_name,
+                "DATABASE_NAME": database_name,
+                "SCHEMA_NAME": schema_name,
+                "SECRET_ARN": secret_arn,
+                "CONSUMER_ACCOUNT": consumer_account,
+                "TABLES_GRANT_SELECT": tables_to_grant_select
+            },
             code=_lambda.Code.from_asset("cdp_cdk_python/lambda_function"),
             timeout=core.Duration.minutes(15),
             memory_size=memory_param.value_as_number,
