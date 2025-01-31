@@ -14,6 +14,7 @@ from constructs import Construct
 from .policy_loader import PolicyLoader
 # from .param_loader import ParameterLoader
 from .cfn_param_loader import ParameterLoader
+from aws_cdk.custom_resources import Provider
 
 class LambdaRolePolicyStack(Stack):
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
@@ -130,7 +131,7 @@ class LambdaRolePolicyStack(Stack):
             max_value=10240,  # Maximum memory supported by AWS Lambda
         )
 
-        fn = _lambda.Function(
+        post_deployment_lambda = _lambda.Function(
             self, 
             "MyFunction",
             runtime=_lambda.Runtime.PYTHON_3_9,
@@ -147,12 +148,30 @@ class LambdaRolePolicyStack(Stack):
                 "TABLES_GRANT_SELECT": tables_to_grant_select
             },
             code=_lambda.Code.from_asset("cdp_cdk_python/lambda_function"),
-            timeout=core.Duration.minutes(15),
+            timeout=core.Duration.seconds(30),
             memory_size=memory_param.value_as_number,
             role=iam_role
+        )
+
+        # Custom Resource Provider
+        provider = Provider(
+            self, "CustomResourceProvider",
+            on_event_handler=post_deployment_lambda
+        )
+
+        # Custom Resource
+        core.CustomResource(
+            self, "PostDeploymentAction",
+            service_token=provider.service_token,
+            properties={
+                "Action": "ExecuteAfterDeployment",
+                "Parameters": {
+                    
+                }
+            }
         )
 
         core.CfnOutput(
             self, 
             "FunctionArn", 
-            value=fn.function_arn)
+            value=post_deployment_lambda.function_arn)
