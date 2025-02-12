@@ -142,7 +142,6 @@ class CDPDeleteAccountStack(Stack):
                 day="*",      # Every day
                 month="*",    # Every month
                 year="*",     # Every year
-                week_day="*"  # Any day of the week
             )
         )
 
