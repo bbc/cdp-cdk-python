@@ -132,8 +132,7 @@ class CDPDeleteAccountStack(Stack):
                 "external_endpoint_post_url": external_endpoint_post_url,
                 "api_key": api_key,
                 "api_secret": api_secret,
-                "callback_url": callback_url,
-                "monitoring_topic_arn": monitoring_topic_arn
+                "callback_url": callback_url
             },
             code=_lambda.Code.from_asset("cdp_cdk_python/lambda_function/cdp_delete_account"),
             timeout=core.Duration.seconds(30),
