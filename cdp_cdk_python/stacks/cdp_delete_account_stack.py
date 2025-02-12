@@ -1,12 +1,11 @@
 from aws_cdk import (
     # Duration,
     Stack,
-    # aws_sqs as sqs,
     aws_s3 as s3,
     aws_iam as iam,
     aws_lambda as _lambda,
     aws_sqs as sqs,
-    aws_sqs as sqs,
+    aws_sns as sns,
     aws_sns_subscriptions as sns_subs,
     aws_events as events,
     aws_events_targets as targets
@@ -103,7 +102,8 @@ class CDPDeleteAccountStack(Stack):
         queue.add_to_resource_policy(send_message_policy)
         
         queue_subscription = sns_subs.SqsSubscription(queue)
-        queue_subscription.bind(sns_topic_arn)
+        sns_topic = sns.Topic.from_topic_arn(self, "RemoteImportedAccountDeletionSNSTopic", sns_topic_arn)
+        queue_subscription.bind(sns_topic)
   
 
         # ✅ Output Queue ARN
