@@ -16,13 +16,13 @@ from constructs import Construct
 import os 
 import json
 from aws_cdk.cloudformation_include import CfnInclude
-from .cfn_param_loader import ParameterLoader
+from ..loaders.cfn_param_loader import ParameterLoader
 
-from cdp_cdk_python.secrets_manager_stack import SecretsManagerStack
+from cdp_cdk_python.stacks.secrets_manager_stack import SecretsManagerStack
 
 class RedshiftRolePolicyStack(Stack):
 
-    def __init__(self, scope: Construct, construct_id: str, secrets_stack: SecretsManagerStack, **kwargs) -> None:
+    def __init__(self, scope: Construct, construct_id: str, env_name: str, secrets_stack: SecretsManagerStack, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
         # Load parameters from a JSON file
@@ -75,7 +75,7 @@ class RedshiftRolePolicyStack(Stack):
             )
         )
 
-        parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/cdp-serverless.json')
+        parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/'+env_name+'/cdp-serverless.json')
         vpc_id = parameter_loader.get_parameter("VpcId")
         namespace_name = parameter_loader.get_parameter("NamespaceName")
         workgroup_name = parameter_loader.get_parameter("WorkgroupName")

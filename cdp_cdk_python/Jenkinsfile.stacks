@@ -10,7 +10,8 @@ pipeline {
 
     parameters {
         booleanParam(name: 'PROCEED_TO_DEPLOY', defaultValue: false, description: 'Select Yes to proceed to deployment after synthesizing.')
-        choice(name: 'USECASE', choices: ['serverless ns and wg', 'producer datashare', 'consumer datashare'], description: 'Select the usecase')
+        choice(name: 'USECASE', choices: ['serverless ns and wg', 'producer datashare', 'consumer datashare', 'cdp delete account'], description: 'Select the usecase')
+        choice(name: 'ENV', choices: ['int', 'test', 'live'], description: 'Select the environment')
     }
 
     stages {
@@ -35,6 +36,9 @@ pipeline {
                         case "consumer datashare":
                             stacksToSelect = "SecretsManagerStack ScvConsumerDatashareStack"
                             break
+                        case "cdp delete account":
+                            stacksToSelect = "CDPDeleteAccountStack"
+                            break
                     }
                     command = initCommand + stacksToSelect
                     sh command
@@ -50,8 +54,8 @@ pipeline {
             steps {
                 script {
                     echo "Proceeding to 'cdk deploy' as PROCEED_TO_DEPLOY is true..."
-                    def initCommand = "source new-venv/bin/activate && cdk deploy --require-approval never "
-                    command = initCommand + stacksToSelect
+                    def initCommand = "cd infrastructure/cdk && source new-venv/bin/activate && cdk deploy --require-approval never --context env="
+                    command = initCommand + selectedEnv + " " + stacksToSelect
                     sh command
                 }
             }

@@ -1,2 +1,5 @@
 aws-cdk-lib>=2.176.0,<3.0.0
 constructs>=10.4.2,<11.0.0
+boto3==1.35.26
+botocore==1.35.26
+requests

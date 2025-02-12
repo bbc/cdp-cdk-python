@@ -5,15 +5,15 @@ from aws_cdk import (
     aws_secretsmanager as secretsmanager
 )
 from constructs import Construct
-from .cfn_param_loader import ParameterLoader
-
+from ..loaders.cfn_param_loader import ParameterLoader
+import os
 class SecretsManagerStack(Stack):
 
-    def __init__(self, scope: Construct, id: str, **kwargs):
+    def __init__(self, scope: Construct, id: str, env_name: str, **kwargs):
         super().__init__(scope, id, **kwargs)
-
+        
         # 🔹 Create a secret in Secrets Manager
-        parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/cdp-serverless.json')
+        parameter_loader = ParameterLoader(self, 'cdp_cdk_python/params/'+env_name+'/cdp-serverless.json')
         secret_name = parameter_loader.get_parameter("SecretName")
         self.secret = secretsmanager.Secret(self, secret_name,
             secret_name=secret_name,
