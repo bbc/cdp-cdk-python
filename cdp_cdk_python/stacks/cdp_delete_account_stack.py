@@ -6,6 +6,8 @@ from aws_cdk import (
     aws_iam as iam,
     aws_lambda as _lambda,
     aws_sqs as sqs,
+    aws_sqs as sqs,
+    aws_sns_subscriptions as sns_subs,
     aws_events as events,
     aws_events_targets as targets
     
@@ -30,7 +32,8 @@ class CDPDeleteAccountStack(Stack):
         api_key = parameter_loader.get_parameter("MParticleAPIKey")
         api_secret = parameter_loader.get_parameter("MParticleAPISecret")
         callback_url = parameter_loader.get_parameter("CallbackUrl")
-        monitoring_topic_arn = parameter_loader.get_parameter("MonitoringTopicArn")
+        sns_topic_arn = parameter_loader.get_parameter("MonitoringTopicArn")
+        sns_account_id = parameter_loader.get_parameter("SNSAccountId")
 
         # Create an IAM Role
         iam_role = iam.Role(
@@ -93,10 +96,15 @@ class CDPDeleteAccountStack(Stack):
             actions=["sqs:SendMessage"],
             effect=iam.Effect.ALLOW,
             resources=[queue.queue_arn],
-            principals=[iam.AccountPrincipal(self.account)]  # Allowing all users in the same AWS Account
+            principals=[iam.AccountPrincipal(sns_account_id)],  # Allowing all users in the same AWS Account
+            conditions={"ArnEquals": {"aws:SourceArn": sns_topic_arn}}
         )
 
         queue.add_to_resource_policy(send_message_policy)
+        
+        queue_subscription = sns_subs.SqsSubscription(queue)
+        queue_subscription.bind(self, sns_topic_arn)
+  
 
         # ✅ Output Queue ARN
         core.CfnOutput(self, "QueueArn", value=queue.queue_arn)

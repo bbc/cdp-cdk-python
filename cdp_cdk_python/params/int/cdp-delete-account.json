@@ -11,7 +11,6 @@
         "DLQUrl": "",
         "ExternalEndpointPostUrl": "",
         "MonitoringTopicArn": "arn:aws:sns:eu-west-1:977228593394:SCVMonitoringTopic-int",
-        "SecretArn": "arn:aws:secretsmanager:eu-west-1:977228593394:secret:redshift-int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr-scvpiiadmin-VeQ6oT",
-        "ConsumerAccount": "145059524404"
+        "SNSAccountId": "977228593394"
     }
   }
