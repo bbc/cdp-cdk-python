@@ -5,7 +5,9 @@ from aws_cdk import (
     aws_s3 as s3,
     aws_iam as iam,
     aws_lambda as _lambda,
-    # aws_redshiftserverless as redshiftserverless,
+    aws_sqs as sqs,
+    aws_events as events,
+    aws_events_targets as targets
     
 )
 import aws_cdk as core
@@ -32,8 +34,11 @@ class CDPDeleteAccountStack(Stack):
 
         # Create an IAM Role
         iam_role = iam.Role(
-            self, "MyIAMRole",
+            self, "LambdaCDPAccountRemovalRole",
             assumed_by=iam.ServicePrincipal("lambda.amazonaws.com"),
+            managed_policies=[
+                iam.ManagedPolicy.from_aws_managed_policy_name("service-role/AWSLambdaBasicExecutionRole")
+            ]
         )
 
         # Initialize the policy loader
@@ -45,13 +50,10 @@ class CDPDeleteAccountStack(Stack):
             replacements={}
         )
 
-        
-
-        describe_statement_doc = policy_loader.load_policy(
-            file_name="describe_statement.json",
+        cloudwatch_metric_doc = policy_loader.load_policy(
+            file_name="cloudwatch_metric.json",
             replacements={}
         )
-
         
         iam_role.attach_inline_policy(
             iam.Policy(
@@ -60,20 +62,46 @@ class CDPDeleteAccountStack(Stack):
                 document=lambda_basic_execution_doc
             ),
         )
-        
-        
-
 
         iam_role.attach_inline_policy(
             iam.Policy(
                 self, 
-                "DescribeStatementPolicy",
-                document=describe_statement_doc
+                "CloudwatchMetricPolicy",
+                document=cloudwatch_metric_doc
+            ),
+        )
+        
+        dlq = sqs.Queue(
+            self, env_name+"-cdp-account-delete-dlq",
+            queue_name=env_name+"-cdp-account-delete-dlq",
+            retention_period=core.Duration.days(14)  # Messages are kept for 14 days
+        )
+
+        # ✅ Create Main SQS Queue with DLQ
+        queue = sqs.Queue(
+            self, env_name+"-cdp-account-delete",
+            queue_name=env_name+"-cdp-account-delete",
+            visibility_timeout=core.Duration.seconds(30),  # Message visibility timeout
+            dead_letter_queue=sqs.DeadLetterQueue(
+                max_receive_count=5,  # Move messages to DLQ after 5 failures
+                queue=dlq
             )
         )
 
-        
-        
+        # ✅ IAM Policy to Allow Sending Messages to SQS
+        send_message_policy = iam.PolicyStatement(
+            actions=["sqs:SendMessage"],
+            effect=iam.Effect.ALLOW,
+            resources=[queue.queue_arn],
+            principals=[iam.AccountPrincipal(self.account)]  # Allowing all users in the same AWS Account
+        )
+
+        queue.add_to_resource_policy(send_message_policy)
+
+        # ✅ Output Queue ARN
+        core.CfnOutput(self, "QueueArn", value=queue.queue_arn)
+        core.CfnOutput(self, "DLQArn", value=dlq.queue_arn)
+
         # Define a parameter for Lambda memory size
         memory_param = core.CfnParameter(
             self,
@@ -104,6 +132,22 @@ class CDPDeleteAccountStack(Stack):
             memory_size=memory_param.value_as_number,
             role=iam_role
         )
+
+
+        rule = events.Rule(
+            self, "MyEventRule",
+            schedule=events.Schedule.cron(
+                minute="0",
+                hour="9",
+                day="*",      # Every day
+                month="*",    # Every month
+                year="*",     # Every year
+                week_day="*"  # Any day of the week
+            )
+        )
+
+        # ✅ Set the Rule Target as the Lambda Function
+        rule.add_target(targets.LambdaFunction(post_deployment_lambda))
 
         core.CfnOutput(
             self, 

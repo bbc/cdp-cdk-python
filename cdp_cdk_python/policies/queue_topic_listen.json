@@ -1,0 +1,18 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Principal": {
+          "AWS": "<SNS-Owner-Account-ID>"
+        },
+        "Action": "sqs:SendMessage",
+        "Resource": "arn:aws:sqs:<region>:<Subscriber-Account-ID>:<SQS-Queue-Name>",
+        "Condition": {
+          "ArnEquals": {
+            "aws:SourceArn": "<SNS-Topic-ARN>"
+          }
+        }
+      }
+    ]
+  }

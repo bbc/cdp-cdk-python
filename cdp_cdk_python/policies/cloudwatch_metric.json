@@ -1,0 +1,10 @@
+{
+    "Statement": [
+      {
+        "Action": "cloudwatch:PutMetricData",
+        "Effect": "Allow",
+        "Resource": "*"
+      }
+    ],
+    "Version": "2012-10-17"
+  }
