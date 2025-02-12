@@ -164,3 +164,8 @@ class CDPDeleteAccountStack(Stack):
             self, 
             "FunctionArn", 
             value=post_deployment_lambda.function_arn)
+        
+        core.CfnOutput(
+            self, 
+            "ImportedTopicArn", 
+            value=sns_topic.topic_arn)
