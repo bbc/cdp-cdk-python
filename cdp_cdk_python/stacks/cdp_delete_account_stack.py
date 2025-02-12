@@ -103,7 +103,7 @@ class CDPDeleteAccountStack(Stack):
         queue.add_to_resource_policy(send_message_policy)
         
         queue_subscription = sns_subs.SqsSubscription(queue)
-        # queue_subscription.bind(self, sns_topic_arn)
+        queue_subscription.bind(sns_topic_arn)
   
 
         # ✅ Output Queue ARN
