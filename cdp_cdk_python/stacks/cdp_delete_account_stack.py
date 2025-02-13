@@ -8,6 +8,7 @@ from aws_cdk import (
     aws_sns as sns,
     aws_sns_subscriptions as sns_subs,
     aws_events as events,
+    aws_secretsmanager as secretsmanager,
     aws_events_targets as targets
     
 )
@@ -28,7 +29,8 @@ class CDPDeleteAccountStack(Stack):
         queue_url = parameter_loader.get_parameter("QueueUrl")
         dead_letter_queue_url = parameter_loader.get_parameter("DLQUrl")
         external_endpoint_post_url = parameter_loader.get_parameter("ExternalEndpointPostUrl")
-        api_key = parameter_loader.get_parameter("MParticleAPIKey")
+        mParticleAPISecretName = parameter_loader.get_parameter("mParticleAPISecretName")
+        api_key = parameter_loader.get_parameter("mParticleAPISecretName")
         api_secret = parameter_loader.get_parameter("MParticleAPISecret")
         callback_url = parameter_loader.get_parameter("CallbackUrl")
         sns_topic_arn = parameter_loader.get_parameter("MonitoringTopicArn")
@@ -120,6 +122,10 @@ class CDPDeleteAccountStack(Stack):
             min_value=128,
             max_value=10240,  # Maximum memory supported by AWS Lambda
         )
+
+        mParticleAPISecret = secretsmanager.Secret.from_secret_name_v2(self, "mParticleAPISecret", mParticleAPISecretName)
+        api_key = mParticleAPISecret.secret_value_from_json("mParticleAPIKey")
+        api_secret = mParticleAPISecret.secret_value_from_json("mParticleAPISecret")
 
         post_deployment_lambda = _lambda.Function(
             self, 

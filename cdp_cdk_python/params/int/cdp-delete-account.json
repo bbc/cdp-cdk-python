@@ -4,8 +4,7 @@
     "main_stack": false,
     "parameters": {
         "Environment": "int",
-        "MParticleAPIKey": "eu1-6fc386fb24f21c4d8098a830f2556995",
-        "MParticleAPISecret": "paEXsxn00kasXJCAS_gVaUfzKTFJJ5fZBSF3Y_hpS3eJ9s-9cabDYx9Qv76lWPzb",
+        "mParticleAPISecretName": "mParticleAPICreds-int",
         "CallbackUrl": "",
         "QueueUrl": "https://sqs.eu-west-1.amazonaws.com/977228593394/int-cdp-account-delete",
         "DLQUrl": "https://sqs.eu-west-1.amazonaws.com/977228593394/int-cdp-account-delete-dlq",
