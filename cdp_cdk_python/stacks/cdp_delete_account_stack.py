@@ -153,7 +153,7 @@ class CDPDeleteAccountStack(Stack):
                     "image": _lambda.Runtime.PYTHON_3_12.bundling_image,
                     "command": [
                         "bash", "-c",
-                        "docker --version && pip install -r requirements.txt -t /asset-output && cp -r . /asset-output"
+                        "docker run hello-world && pip install -r requirements.txt -t /asset-output && cp -r . /asset-output"
                     ],
                 }
             ),
