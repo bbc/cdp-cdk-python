@@ -138,7 +138,7 @@ class CDPDeleteAccountStack(Stack):
         post_deployment_lambda = _lambda.Function(
             self, 
             "MyFunction",
-            runtime=_lambda.Runtime.PYTHON_3_12,
+            runtime=_lambda.Runtime.PYTHON_3_9,
             handler="cdp_delete_account.lambda_handler",
             environment={
                 "queue_url": queue_url,
@@ -148,7 +148,7 @@ class CDPDeleteAccountStack(Stack):
                 "callback_url": callback_url
             },
             code=_lambda.Code.from_asset("cdp_cdk_python/lambda_function/cdp_delete_account", bundling={
-                "image": _lambda.Runtime.PYTHON_3_12.bundling_docker_image,
+                "image": _lambda.Runtime._lambda.Runtime.PYTHON_3_9.bundling_docker_image,
                 "command": [
                     "bash", "-c",
                     "pip install -r requirements.txt -t /asset-output && cp -au . /asset-output"
