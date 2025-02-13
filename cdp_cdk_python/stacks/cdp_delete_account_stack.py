@@ -85,7 +85,7 @@ class CDPDeleteAccountStack(Stack):
                 document=get_secret_value_doc
             )
         )
-        
+
         dlq = sqs.Queue(
             self, env_name+"-cdp-account-delete-dlq",
             queue_name=env_name+"-cdp-account-delete-dlq",
@@ -134,10 +134,7 @@ class CDPDeleteAccountStack(Stack):
             max_value=10240,  # Maximum memory supported by AWS Lambda
         )
 
-        # mParticleAPISecret = secretsmanager.Secret.from_secret_name_v2(self, "mParticleAPISecretName", mParticleAPISecretName)
-        # api_key = mParticleAPISecret.secret_value_from_json("mParticleAPIKey").unsafe_unwrap()
-        # api_secret = mParticleAPISecret.secret_value_from_json("mParticleAPISecret").unsafe_unwrap()
-
+        
         post_deployment_lambda = _lambda.Function(
             self, 
             "MyFunction",
@@ -147,12 +144,16 @@ class CDPDeleteAccountStack(Stack):
                 "queue_url": queue_url,
                 "dead_letter_queue_url": dead_letter_queue_url,
                 "external_endpoint_post_url": external_endpoint_post_url,
-                # "api_key": api_key,
-                # "api_secret": api_secret,
                 "mParticle_api_secret_arn":mParticle_api_secret_arn,
                 "callback_url": callback_url
             },
-            code=_lambda.Code.from_asset("cdp_cdk_python/lambda_function/cdp_delete_account"),
+            code=_lambda.Code.from_asset("cdp_cdk_python/lambda_function/cdp_delete_account", bundling={
+                "image": _lambda.Runtime.PYTHON_3_12.bundling_docker_image,
+                "command": [
+                    "bash", "-c",
+                    "pip install -r requirements.txt -t /asset-output && cp -au . /asset-output"
+                ],
+            }),
             timeout=core.Duration.seconds(30),
             memory_size=memory_param.value_as_number,
             role=iam_role

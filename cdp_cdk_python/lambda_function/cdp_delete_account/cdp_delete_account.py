@@ -18,18 +18,17 @@ def lambda_handler(event, context):
     dead_letter_queue_url = os.getenv("dead_letter_queue_url")
     external_endpoint = os.getenv("external_endpoint_post_url")
     mParticle_api_secret_arn  = os.getenv("mParticle_api_secret_arn")
-    # api_key = os.getenv("api_key")
-    # api_secret = os.getenv("api_secret")
     callback_url = os.getenv("callback_url")
 
-    # Generate the authorization token
-    client = boto3.client("secretsmanager")
+    
 
     try:
-        # ✅ Get the secret value
+        # Generate the authorization token
+        client = boto3.client("secretsmanager")
         response = client.get_secret_value(SecretId=mParticle_api_secret_arn)
-        api_key = json.loads(response["mParticleAPIKey"])
-        api_secret = json.loads(response["mParticleAPISecret"])
+        secret_dict = json.loads(response["SecretString"])
+        api_key = secret_dict["mParticleAPIKey"]
+        api_secret = secret_dict["mParticleAPIKey"]
         raw_token = f"{api_key}:{api_secret}"
         encoded_token = base64.b64encode(raw_token.encode("utf-8")).decode("utf-8")
         authorization_token = f"Basic {encoded_token}"
