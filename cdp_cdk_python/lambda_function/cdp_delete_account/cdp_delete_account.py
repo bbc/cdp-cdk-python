@@ -17,15 +17,27 @@ def lambda_handler(event, context):
     queue_url = os.getenv("queue_url")
     dead_letter_queue_url = os.getenv("dead_letter_queue_url")
     external_endpoint = os.getenv("external_endpoint_post_url")
-    api_key = os.getenv("api_key")
-    api_secret = os.getenv("api_secret")
+    mParticle_api_secret_name  = os.getenv("mParticle_api_secret_name")
+    # api_key = os.getenv("api_key")
+    # api_secret = os.getenv("api_secret")
     callback_url = os.getenv("callback_url")
 
     # Generate the authorization token
-    raw_token = f"{api_key}:{api_secret}"
-    encoded_token = base64.b64encode(raw_token.encode("utf-8")).decode("utf-8")
-    authorization_token = f"Basic {encoded_token}"
+    client = boto3.client("secretsmanager")
 
+    try:
+        # ✅ Get the secret value
+        response = client.get_secret_value(SecretId=mParticle_api_secret_name)
+        api_key = json.loads(response["mParticleAPIKey"])
+        api_secret = json.loads(response["mParticleAPISecret"])
+        raw_token = f"{api_key}:{api_secret}"
+        encoded_token = base64.b64encode(raw_token.encode("utf-8")).decode("utf-8")
+        authorization_token = f"Basic {encoded_token}"
+        print(authorization_token)
+
+    except Exception as e:
+        return f"Error retrieving secret: {str(e)}"
+    
 
     # Fail fast if no messages
     try:
