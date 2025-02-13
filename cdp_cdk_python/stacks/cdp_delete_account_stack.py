@@ -147,13 +147,16 @@ class CDPDeleteAccountStack(Stack):
                 "mParticle_api_secret_arn":mParticle_api_secret_arn,
                 "callback_url": callback_url
             },
-            code=_lambda.Code.from_asset("cdp_cdk_python/lambda_function/cdp_delete_account", bundling={
-                "image": _lambda.Runtime.PYTHON_3_9.bundling_docker_image,
-                "command": [
-                    "bash", "-c",
-                    "pip install -r requirements.txt -t /asset-output && cp -au . /asset-output"
-                ],
-            }),
+            code=_lambda.Code.from_asset(
+                "cdp_cdk_python/lambda_function/cdp_delete_account", 
+                bundling={
+                    "image": _lambda.Runtime.PYTHON_3_9.bundling_image,
+                    "command": [
+                        "bash", "-c",
+                        "pip install -r requirements.txt -t /asset-output && cp -au . /asset-output"
+                    ],
+                }
+            ),
             timeout=core.Duration.seconds(30),
             memory_size=memory_param.value_as_number,
             role=iam_role
