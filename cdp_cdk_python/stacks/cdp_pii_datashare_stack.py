@@ -58,7 +58,7 @@ class CdpPiiDatashareStack(Stack):
 
         get_secret_value_doc = policy_loader.load_policy(
             file_name="get_secret_value.json",
-            replacements={"SecretArn":secret_arn}#"arn:aws:secretsmanager:eu-west-1:977228593394:secret:redshift-int-scv-redshift-pii-redshiftcluster-11epfp2gjslrr-scvpiiadmin-VeQ6oT"
+            replacements={"SecretArn":secret_arn}
         )
 
         execute_batch_statement_doc = policy_loader.load_policy(

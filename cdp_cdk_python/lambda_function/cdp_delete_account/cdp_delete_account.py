@@ -17,7 +17,7 @@ def lambda_handler(event, context):
     queue_url = os.getenv("queue_url")
     dead_letter_queue_url = os.getenv("dead_letter_queue_url")
     external_endpoint = os.getenv("external_endpoint_post_url")
-    mParticle_api_secret_name  = os.getenv("mParticle_api_secret_name")
+    mParticle_api_secret_arn  = os.getenv("mParticle_api_secret_arn")
     # api_key = os.getenv("api_key")
     # api_secret = os.getenv("api_secret")
     callback_url = os.getenv("callback_url")
@@ -27,7 +27,7 @@ def lambda_handler(event, context):
 
     try:
         # ✅ Get the secret value
-        response = client.get_secret_value(SecretId=mParticle_api_secret_name)
+        response = client.get_secret_value(SecretId=mParticle_api_secret_arn)
         api_key = json.loads(response["mParticleAPIKey"])
         api_secret = json.loads(response["mParticleAPISecret"])
         raw_token = f"{api_key}:{api_secret}"

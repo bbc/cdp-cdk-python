@@ -29,7 +29,7 @@ class CDPDeleteAccountStack(Stack):
         queue_url = parameter_loader.get_parameter("QueueUrl")
         dead_letter_queue_url = parameter_loader.get_parameter("DLQUrl")
         external_endpoint_post_url = parameter_loader.get_parameter("ExternalEndpointPostUrl")
-        mParticleAPISecretName = parameter_loader.get_parameter("mParticleAPISecretName")
+        mParticle_api_secret_arn = parameter_loader.get_parameter("mParticleAPISecretARN")
         callback_url = parameter_loader.get_parameter("CallbackUrl")
         sns_topic_arn = parameter_loader.get_parameter("MonitoringTopicArn")
         sns_account_id = parameter_loader.get_parameter("SNSAccountId")
@@ -57,6 +57,11 @@ class CDPDeleteAccountStack(Stack):
             replacements={}
         )
         
+        get_secret_value_doc = policy_loader.load_policy(
+            file_name="get_secret_value.json",
+            replacements={"SecretArn":mParticle_api_secret_arn}
+        )
+
         iam_role.attach_inline_policy(
             iam.Policy(
                 self, 
@@ -71,6 +76,14 @@ class CDPDeleteAccountStack(Stack):
                 "CloudwatchMetricPolicy",
                 document=cloudwatch_metric_doc
             ),
+        )
+        
+        iam_role.attach_inline_policy(
+            iam.Policy(
+                self, 
+                "GetSecretValuePolicy",
+                document=get_secret_value_doc
+            )
         )
         
         dlq = sqs.Queue(
@@ -121,9 +134,9 @@ class CDPDeleteAccountStack(Stack):
             max_value=10240,  # Maximum memory supported by AWS Lambda
         )
 
-        mParticleAPISecret = secretsmanager.Secret.from_secret_name_v2(self, "mParticleAPISecretName", mParticleAPISecretName)
-        api_key = mParticleAPISecret.secret_value_from_json("mParticleAPIKey").unsafe_unwrap()
-        api_secret = mParticleAPISecret.secret_value_from_json("mParticleAPISecret").unsafe_unwrap()
+        # mParticleAPISecret = secretsmanager.Secret.from_secret_name_v2(self, "mParticleAPISecretName", mParticleAPISecretName)
+        # api_key = mParticleAPISecret.secret_value_from_json("mParticleAPIKey").unsafe_unwrap()
+        # api_secret = mParticleAPISecret.secret_value_from_json("mParticleAPISecret").unsafe_unwrap()
 
         post_deployment_lambda = _lambda.Function(
             self, 
@@ -134,8 +147,9 @@ class CDPDeleteAccountStack(Stack):
                 "queue_url": queue_url,
                 "dead_letter_queue_url": dead_letter_queue_url,
                 "external_endpoint_post_url": external_endpoint_post_url,
-                "api_key": api_key,
-                "api_secret": api_secret,
+                # "api_key": api_key,
+                # "api_secret": api_secret,
+                "mParticle_api_secret_arn":mParticle_api_secret_arn,
                 "callback_url": callback_url
             },
             code=_lambda.Code.from_asset("cdp_cdk_python/lambda_function/cdp_delete_account"),
