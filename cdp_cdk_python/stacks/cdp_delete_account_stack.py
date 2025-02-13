@@ -122,8 +122,8 @@ class CDPDeleteAccountStack(Stack):
         )
 
         mParticleAPISecret = secretsmanager.Secret.from_secret_name_v2(self, "mParticleAPISecretName", mParticleAPISecretName)
-        api_key = mParticleAPISecret.secret_value_from_json("mParticleAPIKey")
-        api_secret = mParticleAPISecret.secret_value_from_json("mParticleAPISecret")
+        api_key = mParticleAPISecret.secret_value_from_json("mParticleAPIKey").to_string
+        api_secret = mParticleAPISecret.secret_value_from_json("mParticleAPISecret").to_string
 
         post_deployment_lambda = _lambda.Function(
             self, 
