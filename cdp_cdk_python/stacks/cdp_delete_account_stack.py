@@ -30,8 +30,6 @@ class CDPDeleteAccountStack(Stack):
         dead_letter_queue_url = parameter_loader.get_parameter("DLQUrl")
         external_endpoint_post_url = parameter_loader.get_parameter("ExternalEndpointPostUrl")
         mParticleAPISecretName = parameter_loader.get_parameter("mParticleAPISecretName")
-        api_key = parameter_loader.get_parameter("mParticleAPISecretName")
-        api_secret = parameter_loader.get_parameter("MParticleAPISecret")
         callback_url = parameter_loader.get_parameter("CallbackUrl")
         sns_topic_arn = parameter_loader.get_parameter("MonitoringTopicArn")
         sns_account_id = parameter_loader.get_parameter("SNSAccountId")
