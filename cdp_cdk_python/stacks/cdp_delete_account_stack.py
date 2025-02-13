@@ -123,7 +123,7 @@ class CDPDeleteAccountStack(Stack):
             max_value=10240,  # Maximum memory supported by AWS Lambda
         )
 
-        mParticleAPISecret = secretsmanager.Secret.from_secret_name_v2(self, "mParticleAPISecret", mParticleAPISecretName)
+        mParticleAPISecret = secretsmanager.Secret.from_secret_name_v2(self, "mParticleAPISecretName", mParticleAPISecretName)
         api_key = mParticleAPISecret.secret_value_from_json("mParticleAPIKey")
         api_secret = mParticleAPISecret.secret_value_from_json("mParticleAPISecret")
 
