@@ -19,23 +19,23 @@ def lambda_handler(event, context):
     external_endpoint = os.getenv("external_endpoint_post_url")
     mParticle_api_secret_arn  = os.getenv("mParticle_api_secret_arn")
     callback_url = os.getenv("callback_url")
-
+    client = boto3.client("secretsmanager")
+    response = client.get_secret_value(SecretId=mParticle_api_secret_arn)
+    secret_dict = json.loads(response["SecretString"])
+    api_key = secret_dict["mParticleAPIKey"]
+    api_secret = secret_dict["mParticleAPIKey"]
     
 
-    try:
-        # Generate the authorization token
-        client = boto3.client("secretsmanager")
-        response = client.get_secret_value(SecretId=mParticle_api_secret_arn)
-        secret_dict = json.loads(response["SecretString"])
-        api_key = secret_dict["mParticleAPIKey"]
-        api_secret = secret_dict["mParticleAPIKey"]
-        raw_token = f"{api_key}:{api_secret}"
-        encoded_token = base64.b64encode(raw_token.encode("utf-8")).decode("utf-8")
-        authorization_token = f"Basic {encoded_token}"
-        print(authorization_token)
+    # try:
+    #     # Generate the authorization token
+        
+    #     raw_token = f"{api_key}:{api_secret}"
+    #     encoded_token = base64.b64encode(raw_token.encode("utf-8")).decode("utf-8")
+    #     authorization_token = f"Basic {encoded_token}"
+    #     print(authorization_token)
 
-    except Exception as e:
-        return f"Error retrieving secret: {str(e)}"
+    # except Exception as e:
+    #     return f"Error retrieving secret: {str(e)}"
     
 
     # Fail fast if no messages
@@ -62,7 +62,8 @@ def lambda_handler(event, context):
             QueueUrl=queue_url,
             MaxNumberOfMessages=10,
             WaitTimeSeconds=20, # Long polling
-            VisibilityTimeout = 80 # Dont show message again to re-try for x seconds
+            VisibilityTimeout = 80, # Dont show message again to re-try for x seconds
+            DelaySeconds=7200 # To avoid race condition between SCV Redshift deleting the user data and sending requests to mParticle
         )
 
         messages = response.get('Messages', [])
@@ -71,7 +72,7 @@ def lambda_handler(event, context):
             receipt_handle = message['ReceiptHandle']
             try:
                 sns_message = json.loads(message['Body'])
-                process_message(sns_message, external_endpoint, authorization_token, callback_url)
+                process_message(sns_message, external_endpoint, callback_url, api_key, api_secret)
 
             except Exception as e:
                 print(f"Error processing message: {e} - moving to dlq")
@@ -102,7 +103,7 @@ def lambda_handler(event, context):
         'body': json.dumps('Messages processed successfully')
     }
 
-def process_message(sns_message, external_endpoint, authorization_token, callback_url):
+def process_message(sns_message, external_endpoint, callback_url, api_key, api_secret):
     try:
         #TODO Finish this. Base request unfinished. What info do we have from the message?
         #TODO How can we translate this info to a mParticle deletion request?
@@ -113,39 +114,27 @@ def process_message(sns_message, external_endpoint, authorization_token, callbac
             "subject_request_type": "erasure",
             "submitted_time": datetime.utcnow().isoformat() + "Z",  # Current time in ISO 8601 format
             "subject_identities": {
-                "email": {
-                    "value": sns_message.get('email', 'null'),
-                    "encoding": "raw"
-                },
-                "ios_advertising_id": {
-                    "value": sns_message.get('ios_id', 'null'),
-                    "encoding": "raw"
+                "controller_customer_id": {
+                "value": sns_message.get('hid', 'null'), #"test HID"
+                "encoding": "raw"
                 }
             },
             "api_version": "3.0",
             "status_callback_urls": [
                 callback_url
             ],
-            "group_id": "my-group",
             "extensions": {
                 "opendsr.mparticle.com": {
-                    "skip_waiting_period": False,
-                    "subject_identities": {
-                        "other6": {
-                            "value": "EA7583CD-A667-48BC-B806-42ECB2B48606",
-                            "encoding": "raw"
-                        }
-                    }
+                "skip_waiting_period": 'false'
                 }
             }
         }
 
         headers = {
             "Content-Type": "application/json",
-            "Authorization": f"Basic {authorization_token}"
         }
 
-        response = requests.post(external_endpoint, json=payload, headers=headers)
+        response = requests.post(external_endpoint, json=payload, headers=headers, auth=(api_key, api_secret))
         response.raise_for_status() #decodes the response body and throws an exception for HTTP codes 400-599
         print(f"External API response: {response.text}")
 
