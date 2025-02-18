@@ -164,7 +164,7 @@ class CDPDeleteAccountStack(Stack):
                 #         "pip install -r requirements.txt -t /asset-output && cp -r . /asset-output"
                 #     ],
                 # }
-            ),
+            # ),
             timeout=core.Duration.seconds(30),
             memory_size=memory_param.value_as_number,
             role=iam_role
