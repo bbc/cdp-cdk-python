@@ -141,7 +141,8 @@ class CDPDeleteAccountStack(Stack):
             self, 
             "MyFunction",
             runtime=_lambda.Runtime.PYTHON_3_12,
-            handler="cdp_delete_account.lambda_handler",
+            # handler="cdp_delete_account.lambda_handler",
+            handler="index.lambda_handler",  # Fake handler reference
             environment={
                 "queue_url": queue_url,
                 "dead_letter_queue_url": dead_letter_queue_url,
@@ -149,8 +150,13 @@ class CDPDeleteAccountStack(Stack):
                 "mParticle_api_secret_arn":mParticle_api_secret_arn,
                 "callback_url": callback_url
             },
-            code=_lambda.Code.from_asset(
-                "cdp_cdk_python/lambda_function/cdp_delete_account", 
+            code=_lambda.InlineCode(
+                "def lambda_handler(event, context):\n"
+                "    print('Hello from CDK Lambda!')\n"
+                "    return {'statusCode': 200, 'body': 'Hello World'}"
+            ),
+            # code=_lambda.Code.from_asset(
+                # "cdp_cdk_python/lambda_function/cdp_delete_account", 
                 # bundling={
                 #     "image": _lambda.Runtime.PYTHON_3_12.bundling_image,
                 #     "command": [
