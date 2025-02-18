@@ -103,6 +103,8 @@ class CDPDeleteAccountStack(Stack):
             )
         )
 
+        queue.node.add_dependency(dlq)
+
         # ✅ IAM Policy to Allow Sending Messages to SQS
         send_message_policy = iam.PolicyStatement(
             actions=["sqs:SendMessage"],
